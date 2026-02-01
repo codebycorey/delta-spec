@@ -2,10 +2,10 @@
 name: delta-spec
 description: Spec-driven development with delta-based specifications
 triggers:
-  - /spec
-  - /new-change
-  - /merge
-  - /spec-status
+  - /ds:spec
+  - /ds:new-change
+  - /ds:merge
+  - /ds:status
 ---
 
 # Delta-Spec Workflow
@@ -25,12 +25,12 @@ You are helping manage specifications using the delta-spec system. This system u
 
 ## Commands
 
-### `/spec` - View or discuss specs
+### `/ds:spec` - View or discuss specs
 - List available specs: `ls .specs/*.md`
 - Read a spec to understand current behavior
 - Answer questions about what the system does
 
-### `/new-change <name>` - Start a new change
+### `/ds:new-change <name>` - Start a new change
 1. Create `.specs/changes/<name>/` directory
 2. Create `proposal.md` with this template:
 
@@ -55,7 +55,7 @@ How do we know when this is done?
 4. Create `delta-<domain>.md` files for each affected spec using the delta format below
 5. Use Claude Code's TaskCreate to create implementation tasks
 
-### `/merge` - Merge delta specs into main specs
+### `/ds:merge` - Merge delta specs into main specs
 1. List all delta files in the current change
 2. For each delta file:
    - Read the corresponding main spec
@@ -65,7 +65,7 @@ How do we know when this is done?
 3. Confirm with user before writing
 4. After successful merge, the change folder can be deleted (Git history preserves it)
 
-### `/spec-status` - Show current change status
+### `/ds:status` - Show current change status
 1. List active changes in `.specs/changes/`
 2. For each change, show:
    - Proposal summary (first few lines)
@@ -182,13 +182,13 @@ Do NOT create a tasks.md file - the native task system is better.
 
 ## Example Workflow
 
-User: `/new-change user-authentication`
+User: `/ds:new-change user-authentication`
 
 1. Create `.specs/changes/user-authentication/proposal.md`
 2. Discuss requirements with user
 3. Create `.specs/changes/user-authentication/delta-auth.md` with ADDED requirements
 4. Create implementation tasks using TaskCreate
 5. Implement, marking tasks complete as you go
-6. Run `/merge` to apply delta to `.specs/auth.md`
+6. Run `/ds:merge` to apply delta to `.specs/auth.md`
 7. Delete or keep the change folder (Git has the history)
 8. Commit: "feat(auth): add user authentication - closes #123"

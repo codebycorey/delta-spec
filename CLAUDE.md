@@ -4,10 +4,10 @@ This project uses delta-spec for specification-driven development.
 
 ## Quick Start
 
-- `/spec` - View and discuss specifications
-- `/new-change <name>` - Start a new change with specs
-- `/merge` - Merge completed delta specs into main specs
-- `/spec-status` - See active changes
+- `/ds:spec` - View and discuss specifications
+- `/ds:new-change <name>` - Start a new change with specs
+- `/ds:merge` - Merge completed delta specs into main specs
+- `/ds:status` - See active changes
 
 ## Project Structure
 

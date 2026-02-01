@@ -15,16 +15,16 @@ Delta-Spec is a convention for managing software specifications that:
 
 1. Clone this repo or copy the `.claude/` and `.specs/` folders to your project
 2. Start Claude Code in your project
-3. Run `/new-change my-first-feature` to begin
+3. Run `/ds:new-change my-first-feature` to begin
 
 ## Commands
 
 | Command | Description |
 |---------|-------------|
-| `/spec` | View and discuss specifications |
-| `/new-change <name>` | Start a new change |
-| `/merge` | Merge delta specs into main specs |
-| `/spec-status` | Show active changes |
+| `/ds:spec` | View and discuss specifications |
+| `/ds:new-change <name>` | Start a new change |
+| `/ds:merge` | Merge delta specs into main specs |
+| `/ds:status` | Show active changes |
 
 ## How It Works
 
@@ -60,7 +60,7 @@ Claude creates tasks from your specs. Work through them.
 
 ### 4. Merge
 
-Run `/merge` - Claude applies your deltas to the main specs.
+Run `/ds:merge` - Claude applies your deltas to the main specs.
 
 ### 5. Commit
 

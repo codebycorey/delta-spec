@@ -11,10 +11,27 @@ Delta-Spec is a convention for managing software specifications that:
 - **No CLI required** - Claude handles parsing and merging
 - **Git-native** - Your commit history is your archive
 
+## Installation
+
+### Via OpenSkills (recommended)
+```bash
+npx openskills install YOUR_USER/delta-spec
+npx openskills sync
+```
+
+### Via Claude Code Plugin
+```bash
+/plugin marketplace add YOUR_USER/delta-spec
+/plugin install delta-spec
+```
+
+### Manual
+Copy `SKILL.md` to `.claude/skills/delta-spec.md` in your project.
+
 ## Getting Started
 
-1. Clone this repo or copy the `.claude/` and `.specs/` folders to your project
-2. Start Claude Code in your project
+1. Install delta-spec using one of the methods above
+2. Create `.specs/` directory in your project
 3. Run `/ds:new-change my-first-feature` to begin
 
 ## Commands

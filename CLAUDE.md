@@ -13,7 +13,7 @@ This project uses delta-spec for specification-driven development.
 
 - `.specs/` - All specifications live here
 - `.specs/changes/` - Active changes with delta specs
-- `.claude/skills/delta-spec.md` - The workflow skill
+- `SKILL.md` - The workflow skill (install to `.claude/skills/` in your project)
 
 ## Conventions
 

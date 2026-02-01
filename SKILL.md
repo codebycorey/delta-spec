@@ -1,6 +1,6 @@
 ---
 name: delta-spec
-description: Spec-driven development with delta-based specifications
+description: Spec-driven development with delta-based specifications. Manage requirements using ADDED/MODIFIED/REMOVED deltas that merge into main specs.
 triggers:
   - /ds:spec
   - /ds:new-change

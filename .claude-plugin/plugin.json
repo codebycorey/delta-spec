@@ -1,14 +1,8 @@
 {
-  "name": "delta-spec",
+  "name": "ds",
   "description": "Spec-driven development with delta-based specifications",
   "version": "1.0.0",
   "author": {
     "name": "horti"
-  },
-  "skills": [
-    {
-      "name": "delta-spec",
-      "path": "../SKILL.md"
-    }
-  ]
+  }
 }

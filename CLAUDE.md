@@ -34,8 +34,8 @@ specs/                    # Source of truth (visible)
     └── archive/          # Completed changes preserved
 ```
 
-- `SKILL.md` - The workflow skill (install to `.claude/skills/`)
-- `.claude-plugin/plugin.json` - Plugin manifest
+- `skills/` - Individual skill files (one per command)
+- `.claude-plugin/plugin.json` - Plugin manifest (namespace: `ds:`)
 - `CHANGELOG.md` - Version history
 
 ## Conventions
@@ -91,9 +91,8 @@ All commits MUST follow the [Conventional Commits](https://www.conventionalcommi
 
 | Scope | Description |
 |-------|-------------|
-| `skill` | Changes to SKILL.md |
+| `skill` | Changes to `.claude/skills/` |
 | `spec` | Changes to spec format or examples |
-| `plugin` | Changes to plugin manifest |
 | `scripts` | Changes to validation or other scripts |
 
 ### Examples

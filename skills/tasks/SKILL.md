@@ -7,6 +7,18 @@ description: Create implementation tasks for a change. Explores codebase and use
 
 Create actionable implementation tasks based on the design and delta specs.
 
+## Step 0: Version Check
+
+Check `specs/.delta-spec.json` for version compatibility:
+- If file missing → tell user to run `/ds:init` first
+- If version matches current (1.0.0) → proceed
+- If version mismatch → warn user and offer to migrate:
+  > "This project uses delta-spec v{old}. Current version is v{new}."
+  > Options:
+  > - **Migrate** - Update to current version (may modify spec format)
+  > - **Continue anyway** - Use current commands without migrating
+  > - **Cancel** - Stop and review changes first
+
 ## Step 1: Determine which change
 
 - If `name` provided → use it

@@ -11,6 +11,7 @@ Initialize delta-spec in a repository.
 
 ```
 specs/                        # Source of truth
+├── .delta-spec.json          # Version and config
 ├── auth.md                   # Main specs by domain
 ├── payments.md
 └── .delta/                   # Work in progress
@@ -24,6 +25,13 @@ specs/                        # Source of truth
 - Create `specs/` directory
 - Create `specs/.delta/active/` directory
 - Create `specs/.delta/archive/` directory
+- Create `specs/.delta-spec.json` with:
+  ```json
+  {
+    "version": "1.0.0",
+    "initialized": "YYYY-MM-DD"
+  }
+  ```
 
 **Step 2: Ask about existing code**
 Use AskUserQuestion to ask:

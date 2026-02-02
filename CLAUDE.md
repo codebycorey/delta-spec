@@ -27,12 +27,23 @@ This project uses delta-spec for specification-driven development.
 
 ```
 specs/                    # Source of truth (visible)
+├── .delta-spec.json      # Version and config
 ├── auth.md               # Main specs by domain
 ├── payments.md
 └── .delta/               # Work in progress (hidden)
     ├── active/           # Current changes
     └── archive/          # Completed changes preserved
 ```
+
+The `.delta-spec.json` file tracks which version of delta-spec was used:
+```json
+{
+  "version": "1.0.0",
+  "initialized": "2026-02-02"
+}
+```
+
+Commands check this version and offer to migrate if there's a mismatch.
 
 - `skills/` - Individual skill files (one per command)
 - `.claude-plugin/plugin.json` - Plugin manifest (namespace: `ds:`)
@@ -91,7 +102,7 @@ All commits MUST follow the [Conventional Commits](https://www.conventionalcommi
 
 | Scope | Description |
 |-------|-------------|
-| `skill` | Changes to `.claude/skills/` |
+| `skill` | Changes to `skills/` |
 | `spec` | Changes to spec format or examples |
 | `scripts` | Changes to validation or other scripts |
 

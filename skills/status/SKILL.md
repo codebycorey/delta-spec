@@ -7,6 +7,16 @@ description: Show active delta-spec changes with their status, dependencies, and
 
 Show status of all active changes.
 
+## Step 0: Version Check
+
+Check `specs/.delta-spec.json` for version compatibility:
+- If file missing → show warning that delta-spec is not initialized
+- If version mismatch → show warning in status output:
+  ```
+  ⚠️  Version mismatch: project v{old}, current v{new}
+      Run any command to migrate, or review CHANGELOG for breaking changes.
+  ```
+
 ## Steps
 
 1. List changes in `specs/.delta/active/`

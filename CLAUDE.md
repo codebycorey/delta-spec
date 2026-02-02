@@ -4,6 +4,7 @@ This project uses delta-spec for specification-driven development.
 
 ## Quick Start
 
+- `/ds:init` - Initialize delta-spec (optionally generate specs from existing code)
 - `/ds:new <name>` - Start a new change (creates + works on proposal)
 - `/ds:plan [name]` - Create design + delta specs (explores codebase)
 - `/ds:tasks [name]` - Create implementation tasks
@@ -14,6 +15,7 @@ This project uses delta-spec for specification-driven development.
 ## Workflow
 
 ```
+/ds:init               → Set up specs/ folder (once per repo)
 /ds:new add-feature    → Work on proposal (problem, scope)
 /ds:plan               → Explore codebase, create design + delta specs
 /ds:tasks              → Create implementation tasks

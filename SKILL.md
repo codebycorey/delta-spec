@@ -2,6 +2,7 @@
 name: delta-spec
 description: Spec-driven development with delta-based specifications. Manage requirements through proposal → plan → tasks workflow.
 triggers:
+  - /ds:init
   - /ds:new
   - /ds:plan
   - /ds:tasks
@@ -33,6 +34,56 @@ specs/                        # Source of truth (visible, important)
 ```
 
 ## Commands
+
+### `/ds:init` - Initialize delta-spec in a repository
+
+**Step 1: Create directory structure**
+- Create `specs/` directory
+- Create `specs/.delta/active/` directory
+- Create `specs/.delta/archive/` directory
+
+**Step 2: Ask about existing code**
+Use AskUserQuestion to ask:
+> "Would you like me to explore the codebase and generate initial specs based on existing code?"
+>
+> Options:
+> - **Yes, generate specs** - I'll analyze the codebase and create spec files for each domain I discover
+> - **No, start fresh** - Just create the empty folder structure
+
+**If user chooses "generate specs":**
+
+**Step 3: Explore the codebase**
+- Identify major domains/bounded contexts (auth, payments, api, etc.)
+- Find key behaviors, business rules, and requirements
+- Look at existing tests for behavioral expectations
+- Examine API routes, models, services for structure
+
+**Step 4: Generate specs per domain**
+For each domain discovered:
+- Create `specs/<domain>.md` with frontmatter indicating it was generated:
+  ```yaml
+  ---
+  generated: true
+  generated_at: YYYY-MM-DD
+  ---
+  ```
+- Document existing behavior as requirements
+- Use the standard spec format with Requirements and Scenarios
+- User can remove frontmatter after reviewing/refining the spec
+
+**Step 5: Summary**
+- List all spec files created
+- Note any areas that need manual review
+- Suggest running `/ds:status` to see the result
+
+**If user chooses "start fresh":**
+- Just confirm the directories were created
+- Suggest running `/ds:new <name>` to start their first change
+
+**Idempotency:**
+- If `specs/` already exists, skip creation and note it
+- If specs already exist, ask before overwriting
+- Safe to run multiple times
 
 ### `/ds:new <name>` - Start a new change
 

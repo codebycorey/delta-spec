@@ -9,6 +9,7 @@ This project uses delta-spec for specification-driven development.
 - `/ds:plan [name]` - Create design + delta specs (explores codebase)
 - `/ds:tasks [name]` - Create implementation tasks
 - `/ds:archive [name]` - Merge delta specs and archive
+- `/ds:drop [name]` - Abandon a change (deletes, cleans up dependencies)
 - `/ds:spec [domain]` - View and discuss specifications
 - `/ds:status` - See active changes
 
@@ -21,6 +22,7 @@ This project uses delta-spec for specification-driven development.
 /ds:tasks              → Create implementation tasks
 [implement]
 /ds:archive            → Merge deltas into specs, archive change
+/ds:drop               → Abandon change (if no longer needed)
 ```
 
 ## Project Structure
@@ -38,7 +40,7 @@ specs/                    # Source of truth (visible)
 The `.delta-spec.json` file tracks which version of delta-spec was used:
 ```json
 {
-  "version": "2.0.0",
+  "version": "0.0.1",
   "initialized": "2026-02-02"
 }
 ```

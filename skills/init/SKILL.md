@@ -1,7 +1,8 @@
 ---
 name: init
 description: Initialize delta-spec in a repository. Creates specs/ directory structure and optionally generates specs from existing code.
-version: 2.0.0
+version: 0.0.1
+license: MIT
 ---
 
 # /ds:init - Initialize delta-spec

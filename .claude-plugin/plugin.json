@@ -1,7 +1,7 @@
 {
   "name": "ds",
   "description": "Spec-driven development with delta-based specifications",
-  "version": "2.0.0",
+  "version": "0.0.1",
   "author": {
     "name": "horti"
   },

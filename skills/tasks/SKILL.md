@@ -1,7 +1,8 @@
 ---
 name: tasks
 description: Create implementation tasks for a change. Explores codebase and uses TaskCreate for native task tracking.
-version: 2.0.0
+version: 0.0.1
+license: MIT
 ---
 
 # /ds:tasks [name] - Create implementation tasks

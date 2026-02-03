@@ -1,7 +1,8 @@
 ---
 name: plan
 description: Create design and delta specs for a change. Explores codebase to create an implementation approach that fits existing patterns.
-version: 2.0.0
+version: 0.0.1
+license: MIT
 ---
 
 # /ds:plan [name] - Create design and delta specs

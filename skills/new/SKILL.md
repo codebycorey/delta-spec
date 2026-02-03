@@ -1,7 +1,8 @@
 ---
 name: new
 description: Start a new delta-spec change. Creates proposal.md and works with user to define problem and scope.
-version: 2.0.0
+version: 0.0.1
+license: MIT
 ---
 
 # /ds:new <name> - Start a new change

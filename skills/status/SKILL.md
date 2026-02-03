@@ -1,7 +1,8 @@
 ---
 name: status
 description: Show active delta-spec changes with their status, dependencies, and next steps.
-version: 2.0.0
+version: 0.0.1
+license: MIT
 ---
 
 # /ds:status - Show active changes

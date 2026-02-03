@@ -1,7 +1,8 @@
 ---
 name: archive
 description: Complete and archive a change. Merges delta specs into main specs and moves to archive.
-version: 2.0.0
+version: 0.0.1
+license: MIT
 ---
 
 # /ds:archive [name] - Complete and archive a change

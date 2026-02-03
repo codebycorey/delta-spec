@@ -1,7 +1,8 @@
 ---
 name: spec
 description: View or discuss specifications. List all specs or read a specific domain spec.
-version: 2.0.0
+version: 0.0.1
+license: MIT
 ---
 
 # /ds:spec [domain] - View or discuss specs

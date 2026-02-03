@@ -13,18 +13,17 @@ Delta-Spec is a convention for managing software specifications that:
 
 ## Installation
 
-### Manual (recommended)
-
-Clone or copy this repository to `.claude/plugins/delta-spec` in your project:
-
 ```bash
-git clone https://github.com/YOUR_USER/delta-spec .claude/plugins/delta-spec
+/plugin marketplace add codebycorey/delta-spec
+/plugin install ds@delta-spec
 ```
 
-Or add as a git submodule:
+Or add to your `~/.claude/settings.json`:
 
-```bash
-git submodule add https://github.com/YOUR_USER/delta-spec .claude/plugins/delta-spec
+```json
+{
+  "skills": ["/path/to/cloned/delta-spec"]
+}
 ```
 
 ## Getting Started
@@ -42,6 +41,7 @@ git submodule add https://github.com/YOUR_USER/delta-spec .claude/plugins/delta-
 | `/ds:plan [name]` | Create design and delta specs |
 | `/ds:tasks [name]` | Create implementation tasks |
 | `/ds:archive [name]` | Merge delta specs and archive change |
+| `/ds:drop [name]` | Abandon a change and clean up dependencies |
 | `/ds:spec [domain]` | View and discuss specifications |
 | `/ds:status` | Show active changes |
 
@@ -54,6 +54,7 @@ git submodule add https://github.com/YOUR_USER/delta-spec .claude/plugins/delta-
 /ds:tasks              → Create implementation tasks
 [implement]
 /ds:archive            → Merge deltas into specs, archive change
+/ds:drop               → Abandon change (if no longer needed)
 ```
 
 ## Project Structure

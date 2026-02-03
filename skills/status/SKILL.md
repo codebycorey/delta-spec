@@ -1,6 +1,7 @@
 ---
 name: status
 description: Show active delta-spec changes with their status, dependencies, and next steps.
+version: 2.0.0
 ---
 
 # /ds:status - Show active changes
@@ -19,12 +20,12 @@ Check `specs/.delta-spec.json` for version compatibility:
 
 ## Steps
 
-1. List changes in `specs/.delta/active/`
+1. List changes in `specs/.delta/` (excluding `archive/`)
 2. For each, read the proposal and show:
    - Which artifacts exist (proposal? design? specs?)
    - Brief summary from proposal
    - Dependencies status:
-     - Check if dependencies are still in `active/` (blocked) or `archive/` (satisfied)
+     - Check if dependencies are still in `specs/.delta/` (blocked) or `archive/` (satisfied)
      - Show: `✓ ready` or `⏳ blocked by: <change-name>`
    - Next step (plan? tasks? ready to archive?)
 

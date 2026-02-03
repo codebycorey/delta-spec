@@ -1,6 +1,7 @@
 ---
 name: init
 description: Initialize delta-spec in a repository. Creates specs/ directory structure and optionally generates specs from existing code.
+version: 2.0.0
 ---
 
 # /ds:init - Initialize delta-spec
@@ -15,7 +16,7 @@ specs/                        # Source of truth
 ├── auth.md                   # Main specs by domain
 ├── payments.md
 └── .delta/                   # Work in progress
-    ├── active/               # Current changes
+    ├── <change-name>/        # Current changes
     └── archive/              # Completed changes
 ```
 
@@ -23,12 +24,12 @@ specs/                        # Source of truth
 
 **Step 1: Create directory structure**
 - Create `specs/` directory
-- Create `specs/.delta/active/` directory
+- Create `specs/.delta/` directory
 - Create `specs/.delta/archive/` directory
-- Create `specs/.delta-spec.json` with:
+- Create `specs/.delta-spec.json` with the current plugin version:
   ```json
   {
-    "version": "1.0.0",
+    "version": "<current plugin version>",
     "initialized": "YYYY-MM-DD"
   }
   ```

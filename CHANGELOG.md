@@ -7,14 +7,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.0.0] - 2026-02-02
+
 ### Added
 - Version tracking via `specs/.delta-spec.json`
 - Version check on all commands with migration prompt on mismatch
-- Restructured as Claude Code plugin with `ds:` namespace
+- `/ds:init` command to initialize repository
+- `/ds:plan` command for design and delta spec creation
+- `/ds:tasks` command for implementation task generation
+- `version` field in all SKILL.md frontmatter
 
 ### Changed
+- **BREAKING:** Directory changed from `.specs/` to `specs/`
+- **BREAKING:** Commands renamed: `/ds:new-change` → `/ds:new`, `/ds:merge` → `/ds:archive`
 - Skills now in `skills/` directory (plugin structure)
-- Commands renamed: `/ds:init`, `/ds:new`, `/ds:plan`, `/ds:tasks`, `/ds:archive`, `/ds:spec`, `/ds:status`
+- Validation script now uses correct paths for delta specs
+
+### Fixed
+- README.md now matches actual implementation
+- Installation instructions updated for manual setup
 
 ## [1.0.0] - 2025-02-01
 

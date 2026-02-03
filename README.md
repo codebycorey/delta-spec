@@ -13,42 +13,67 @@ Delta-Spec is a convention for managing software specifications that:
 
 ## Installation
 
-### Via OpenSkills (recommended)
+### Manual (recommended)
+
+Clone or copy this repository to `.claude/plugins/delta-spec` in your project:
+
 ```bash
-npx openskills install YOUR_USER/delta-spec
-npx openskills sync
+git clone https://github.com/YOUR_USER/delta-spec .claude/plugins/delta-spec
 ```
 
-### Via Claude Code Plugin
-```bash
-/plugin marketplace add YOUR_USER/delta-spec
-/plugin install delta-spec
-```
+Or add as a git submodule:
 
-### Manual
-Copy `SKILL.md` to `.claude/skills/delta-spec.md` in your project.
+```bash
+git submodule add https://github.com/YOUR_USER/delta-spec .claude/plugins/delta-spec
+```
 
 ## Getting Started
 
 1. Install delta-spec using one of the methods above
-2. Create `.specs/` directory in your project
-3. Run `/ds:new-change my-first-feature` to begin
+2. Run `/ds:init` to initialize the `specs/` directory
+3. Run `/ds:new my-first-feature` to begin your first change
 
 ## Commands
 
 | Command | Description |
 |---------|-------------|
-| `/ds:spec` | View and discuss specifications |
-| `/ds:new-change <name>` | Start a new change |
-| `/ds:merge` | Merge delta specs into main specs |
+| `/ds:init` | Initialize delta-spec in a repository |
+| `/ds:new <name>` | Start a new change with a proposal |
+| `/ds:plan [name]` | Create design and delta specs |
+| `/ds:tasks [name]` | Create implementation tasks |
+| `/ds:archive [name]` | Merge delta specs and archive change |
+| `/ds:spec [domain]` | View and discuss specifications |
 | `/ds:status` | Show active changes |
+
+## Workflow
+
+```
+/ds:init               → Set up specs/ folder (once per repo)
+/ds:new add-feature    → Work on proposal (problem, scope)
+/ds:plan               → Explore codebase, create design + delta specs
+/ds:tasks              → Create implementation tasks
+[implement]
+/ds:archive            → Merge deltas into specs, archive change
+```
+
+## Project Structure
+
+```
+specs/                        # Source of truth (visible)
+├── .delta-spec.json          # Version and config
+├── auth.md                   # Main specs by domain
+├── payments.md
+└── .delta/                   # Work in progress (hidden)
+    ├── <change-name>/        # Current changes
+    └── archive/              # Completed changes preserved
+```
 
 ## How It Works
 
 ### 1. Write a Proposal
 
 ```markdown
-# Add User Authentication
+# Proposal: add-auth
 
 ## Problem
 Users can't log in to the application.
@@ -75,9 +100,9 @@ The system SHALL authenticate users with email and password.
 
 Claude creates tasks from your specs. Work through them.
 
-### 4. Merge
+### 4. Archive
 
-Run `/ds:merge` - Claude applies your deltas to the main specs.
+Run `/ds:archive` - Claude applies your deltas to the main specs.
 
 ### 5. Commit
 

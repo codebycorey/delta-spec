@@ -1,6 +1,7 @@
 ---
 name: plan
 description: Create design and delta specs for a change. Explores codebase to create an implementation approach that fits existing patterns.
+version: 2.0.0
 ---
 
 # /ds:plan [name] - Create design and delta specs
@@ -11,7 +12,7 @@ Create a design document and delta specs based on the proposal and codebase expl
 
 Check `specs/.delta-spec.json` for version compatibility:
 - If file missing → tell user to run `/ds:init` first
-- If version matches current (1.0.0) → proceed
+- If version matches current plugin version → proceed
 - If version mismatch → warn user and offer to migrate:
   > "This project uses delta-spec v{old}. Current version is v{new}."
   > Options:
@@ -21,9 +22,9 @@ Check `specs/.delta-spec.json` for version compatibility:
 
 ## Step 1: Determine which change
 
-- If `name` provided → use `specs/.delta/active/<name>/`
+- If `name` provided → use `specs/.delta/<name>/`
 - If inferable from conversation (e.g., user just ran `/ds:new add-oauth`) → use it
-- If only one change in `active/` → use it
+- If only one change in `specs/.delta/` → use it
 - If multiple and not inferable → use AskUserQuestion to let user pick
 - If none → tell user to run `/ds:new` first
 
@@ -36,7 +37,7 @@ Check `specs/.delta-spec.json` for version compatibility:
 ## Step 2b: Check dependencies
 
 - Parse Dependencies section from proposal
-- For each dependency, check if it exists in `archive/` (satisfied) or `active/` (not satisfied)
+- For each dependency, check if it exists in `archive/` (satisfied) or `specs/.delta/` (not satisfied)
 - If unsatisfied dependencies:
   - Warn user: "This change depends on `<name>` which hasn't been archived yet."
   - Ask if they want to proceed anyway or work on the dependency first
@@ -88,7 +89,7 @@ During exploration, if you discover:
 ## Step 6: Create delta specs
 
 - Determine which spec domains are affected
-- Create delta specs in `specs/.delta/active/<name>/specs/<domain>.md`
+- Create delta specs in `specs/.delta/<name>/specs/<domain>.md`
 - Use the delta format (ADDED/MODIFIED/REMOVED sections)
 - If main spec doesn't exist yet, note it will be created
 

@@ -31,14 +31,14 @@ specs/                    # Source of truth (visible)
 ├── auth.md               # Main specs by domain
 ├── payments.md
 └── .delta/               # Work in progress (hidden)
-    ├── active/           # Current changes
+    ├── <change-name>/    # Current changes
     └── archive/          # Completed changes preserved
 ```
 
 The `.delta-spec.json` file tracks which version of delta-spec was used:
 ```json
 {
-  "version": "1.0.0",
+  "version": "2.0.0",
   "initialized": "2026-02-02"
 }
 ```

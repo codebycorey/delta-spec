@@ -5,7 +5,7 @@
 
 set -e
 
-SPECS_DIR=".specs"
+SPECS_DIR="specs"
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
@@ -79,11 +79,13 @@ for spec in "$SPECS_DIR"/*.md; do
     validate_spec "$spec"
 done
 
-# Validate delta specs in changes
-if [ -d "$SPECS_DIR/changes" ]; then
-    for change_dir in "$SPECS_DIR/changes"/*/; do
+# Validate delta specs in changes (excluding archive)
+if [ -d "$SPECS_DIR/.delta" ]; then
+    for change_dir in "$SPECS_DIR/.delta"/*/; do
         [ -d "$change_dir" ] || continue
-        for delta in "$change_dir"delta-*.md; do
+        # Skip archive directory
+        [[ "$change_dir" == *"/archive/"* ]] && continue
+        for delta in "$change_dir"specs/*.md; do
             [ -f "$delta" ] || continue
             validate_delta "$delta"
         done

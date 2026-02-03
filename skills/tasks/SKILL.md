@@ -1,6 +1,7 @@
 ---
 name: tasks
 description: Create implementation tasks for a change. Explores codebase and uses TaskCreate for native task tracking.
+version: 2.0.0
 ---
 
 # /ds:tasks [name] - Create implementation tasks
@@ -11,7 +12,7 @@ Create actionable implementation tasks based on the design and delta specs.
 
 Check `specs/.delta-spec.json` for version compatibility:
 - If file missing → tell user to run `/ds:init` first
-- If version matches current (1.0.0) → proceed
+- If version matches current plugin version → proceed
 - If version mismatch → warn user and offer to migrate:
   > "This project uses delta-spec v{old}. Current version is v{new}."
   > Options:
@@ -23,7 +24,7 @@ Check `specs/.delta-spec.json` for version compatibility:
 
 - If `name` provided → use it
 - If inferable from conversation → use it
-- If only one change in `active/` → use it
+- If only one change in `specs/.delta/` → use it
 - If multiple and not inferable → ask user
 - If none → tell user to run `/ds:new` first
 

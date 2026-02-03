@@ -1,6 +1,7 @@
 ---
 name: new
 description: Start a new delta-spec change. Creates proposal.md and works with user to define problem and scope.
+version: 2.0.0
 ---
 
 # /ds:new <name> - Start a new change
@@ -11,7 +12,7 @@ Start a new change by creating a proposal.
 
 Check `specs/.delta-spec.json` for version compatibility:
 - If file missing → tell user to run `/ds:init` first
-- If version matches current (1.0.0) → proceed
+- If version matches current plugin version → proceed
 - If version mismatch → warn user and offer to migrate:
   > "This project uses delta-spec v{old}. Current version is v{new}."
   > Options:
@@ -21,7 +22,7 @@ Check `specs/.delta-spec.json` for version compatibility:
 
 ## Steps
 
-1. Create `specs/.delta/active/<name>/` directory
+1. Create `specs/.delta/<name>/` directory
 2. Create `proposal.md` from the template below
 3. Work with the user to flesh out the proposal interactively
 

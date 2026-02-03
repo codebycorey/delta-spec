@@ -1,6 +1,6 @@
 ---
 name: new
-description: Start a new delta-spec change. Creates proposal.md and works with user to define problem and scope.
+description: This skill should be used when the user asks to "start a new change", "create a proposal", "begin a feature", or wants to start working on something new with delta-spec. Creates proposal.md and works with user to define problem and scope.
 version: 0.0.1
 license: MIT
 ---

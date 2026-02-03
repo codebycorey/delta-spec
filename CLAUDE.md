@@ -2,54 +2,18 @@
 
 This project uses delta-spec for specification-driven development.
 
-## Quick Start
+## Commands
 
-- `/ds:init` - Initialize delta-spec (optionally generate specs from existing code)
-- `/ds:new <name>` - Start a new change (creates + works on proposal)
-- `/ds:plan [name]` - Create design + delta specs (explores codebase)
-- `/ds:tasks [name]` - Create implementation tasks
-- `/ds:archive [name]` - Merge delta specs and archive
-- `/ds:drop [name]` - Abandon a change (deletes, cleans up dependencies)
-- `/ds:spec [domain]` - View and discuss specifications
-- `/ds:status` - See active changes
-
-## Workflow
-
-```
-/ds:init               → Set up specs/ folder (once per repo)
-/ds:new add-feature    → Work on proposal (problem, scope)
-/ds:plan               → Explore codebase, create design + delta specs
-/ds:tasks              → Create implementation tasks
-[implement]
-/ds:archive            → Merge deltas into specs, archive change
-/ds:drop               → Abandon change (if no longer needed)
-```
-
-## Project Structure
-
-```
-specs/                    # Source of truth (visible)
-├── .delta-spec.json      # Version and config
-├── auth.md               # Main specs by domain
-├── payments.md
-└── .delta/               # Work in progress (hidden)
-    ├── <change-name>/    # Current changes
-    └── archive/          # Completed changes preserved
-```
-
-The `.delta-spec.json` file tracks which version of delta-spec was used:
-```json
-{
-  "version": "0.0.1",
-  "initialized": "2026-02-02"
-}
-```
-
-Commands check this version and offer to migrate if there's a mismatch.
-
-- `skills/` - Individual skill files (one per command)
-- `.claude-plugin/plugin.json` - Plugin manifest (namespace: `ds:`)
-- `CHANGELOG.md` - Version history
+| Command | Description |
+|---------|-------------|
+| `/ds:init` | Initialize delta-spec (optionally generate specs from existing code) |
+| `/ds:new <name>` | Start a new change (creates + works on proposal) |
+| `/ds:plan [name]` | Create design + delta specs (explores codebase) |
+| `/ds:tasks [name]` | Create implementation tasks |
+| `/ds:archive [name]` | Merge delta specs and archive |
+| `/ds:drop [name]` | Abandon a change (deletes, cleans up dependencies) |
+| `/ds:spec [domain]` | View and discuss specifications |
+| `/ds:status` | See active changes |
 
 ## Conventions
 
@@ -63,29 +27,24 @@ Commands check this version and offer to migrate if there's a mismatch.
 
 Create specs by domain (e.g., `auth.md`, `payments.md`, `api.md`). Each spec file covers one bounded context.
 
-## Versioning
+## Version Handling
 
-This project uses [Semantic Versioning](https://semver.org/):
+The `.delta-spec.json` file tracks the version used to initialize specs:
+```json
+{
+  "version": "0.0.1",
+  "initialized": "2026-02-02"
+}
+```
 
-- **MAJOR** (1.x.x) - Breaking changes to skill commands or spec format
-- **MINOR** (x.1.x) - New features, backward compatible
-- **PATCH** (x.x.1) - Bug fixes, documentation updates
-
-When releasing:
-1. Update version in `.claude-plugin/plugin.json`
-2. Add entry to `CHANGELOG.md`
-3. Commit and tag: `git tag v1.0.0`
+Skills check this version against the current plugin version (in `.claude-plugin/plugin.json`). On mismatch, warn the user and offer migration options.
 
 ## Conventional Commits
 
-All commits MUST follow the [Conventional Commits](https://www.conventionalcommits.org/) specification:
+All commits MUST follow [Conventional Commits](https://www.conventionalcommits.org/):
 
 ```
 <type>(<scope>): <description>
-
-[optional body]
-
-[optional footer(s)]
 ```
 
 ### Types
@@ -95,9 +54,7 @@ All commits MUST follow the [Conventional Commits](https://www.conventionalcommi
 | `feat` | New feature |
 | `fix` | Bug fix |
 | `docs` | Documentation only |
-| `style` | Formatting, no code change |
 | `refactor` | Code change that neither fixes a bug nor adds a feature |
-| `test` | Adding or updating tests |
 | `chore` | Maintenance tasks, dependencies |
 
 ### Scopes
@@ -106,24 +63,11 @@ All commits MUST follow the [Conventional Commits](https://www.conventionalcommi
 |-------|-------------|
 | `skill` | Changes to `skills/` |
 | `spec` | Changes to spec format or examples |
-| `scripts` | Changes to validation or other scripts |
-
-### Examples
-
-```bash
-feat(skill): add /ds:archive command
-fix(skill): correct merge algorithm for RENAMED operations
-docs: update installation instructions in README
-chore(plugin): bump version to 1.1.0
-refactor(skill): simplify delta parsing logic
-```
+| `plugin` | Changes to plugin manifest |
 
 ### Breaking Changes
 
-Add `!` after type/scope and include `BREAKING CHANGE:` in footer:
-
+Add `!` after type/scope:
 ```
 feat(spec)!: change requirement header format
-
-BREAKING CHANGE: Requirements now use `## Requirement:` instead of `### Requirement:`
 ```

@@ -1,6 +1,6 @@
 ---
 name: init
-description: Initialize delta-spec in a repository. Creates specs/ directory structure and optionally generates specs from existing code.
+description: This skill should be used when the user asks to "initialize delta-spec", "set up specs", "create specs directory", or wants to start using delta-spec in a repository. Creates specs/ directory structure and optionally generates specs from existing code.
 version: 0.0.1
 license: MIT
 ---

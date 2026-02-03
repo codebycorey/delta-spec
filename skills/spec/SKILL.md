@@ -1,6 +1,6 @@
 ---
 name: spec
-description: View or discuss specifications. List all specs or read a specific domain spec.
+description: This skill should be used when the user asks to "view specs", "show specifications", "what does the spec say", or wants to read and discuss current specifications. List all specs or read a specific domain spec.
 version: 0.0.1
 license: MIT
 ---

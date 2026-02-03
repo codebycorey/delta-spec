@@ -73,9 +73,11 @@ validate_delta() {
 echo "=== Delta-Spec Validation ==="
 echo ""
 
-# Validate main specs
+# Validate main specs (excluding example.md template)
 for spec in "$SPECS_DIR"/*.md; do
     [ -f "$spec" ] || continue
+    # Skip example template
+    [[ "$(basename "$spec")" == "example.md" ]] && continue
     validate_spec "$spec"
 done
 

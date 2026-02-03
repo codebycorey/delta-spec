@@ -13,18 +13,20 @@ Delta-Spec is a convention for managing software specifications that:
 
 ## Installation
 
+### Local Installation
+
+Clone the repository and run Claude Code with the plugin directory:
+
 ```bash
-/plugin marketplace add codebycorey/delta-spec
-/plugin install ds@delta-spec
+git clone https://github.com/codebycorey/delta-spec.git
+claude --plugin-dir /path/to/delta-spec
 ```
 
-Or add to your `~/.claude/settings.json`:
+### Verify Installation
 
-```json
-{
-  "skills": ["/path/to/cloned/delta-spec"]
-}
-```
+After installation, run `/help` to see the `ds:` commands listed under plugin commands.
+
+> **Note:** Marketplace installation will be available once the plugin is published. For now, use the local installation method above.
 
 ## Getting Started
 
@@ -118,6 +120,48 @@ git commit -m "feat(auth): add user authentication"
 - **Specs before code** - Agree on behavior, then implement
 - **Deltas over rewrites** - Surgical changes, clear history
 - **Trust the tools you have** - Git for history, Claude for intelligence
+
+## Development
+
+### Testing Locally
+
+Run Claude Code with the plugin directory to test changes:
+
+```bash
+claude --plugin-dir /path/to/delta-spec
+```
+
+Then verify skills work:
+- `/ds:status` - Should show active changes (or none)
+- `/ds:spec` - Should list spec files
+- `/ds:init` - Should detect if already initialized
+
+### Validating Specs
+
+Run the validation script to check spec format:
+
+```bash
+./scripts/validate-specs.sh
+```
+
+This checks for:
+- Required sections (`## Purpose`, `## Requirements`)
+- RFC 2119 keywords (SHALL, MUST, SHOULD, MAY)
+- Scenarios for requirements
+- Delta operation sections (ADDED/MODIFIED/REMOVED/RENAMED)
+
+### Project Structure
+
+```
+delta-spec/
+├── .claude-plugin/       # Plugin manifest
+│   ├── plugin.json       # Plugin definition (name, version)
+│   └── marketplace.json  # Marketplace metadata
+├── commands/ds/          # Slash command entry points
+├── skills/               # Detailed skill implementations
+├── scripts/              # Utility scripts
+└── specs/                # Example specs directory
+```
 
 ## License
 

@@ -1,6 +1,6 @@
 ---
 name: tasks
-description: Create implementation tasks for a change. Explores codebase and uses TaskCreate for native task tracking.
+description: This skill should be used when the user asks to "create tasks", "generate implementation tasks", "what should I work on", or wants to break down a change into actionable work items. Explores codebase and uses TaskCreate for native task tracking.
 version: 0.0.1
 license: MIT
 ---

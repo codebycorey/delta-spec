@@ -1,0 +1,261 @@
+---
+generated: true
+generated_at: 2026-02-03
+---
+
+# Commands Specification
+
+## Purpose
+
+Defines the slash commands that provide the user interface for delta-spec. Each command maps to a skill implementation and follows consistent patterns for version checking, change inference, and dependency management.
+
+## Requirements
+
+### Requirement: Initialize Repository
+The system SHALL provide a `/ds:init` command that creates the specs directory structure.
+
+#### Scenario: First-time initialization
+- GIVEN a repository without a specs directory
+- WHEN the user runs `/ds:init`
+- THEN the system creates `specs/`, `specs/.delta/`, and `specs/.delta/archive/`
+- AND creates `specs/.delta-spec.json` with the current plugin version
+
+#### Scenario: Optional spec generation
+- GIVEN an initialized repository with existing code
+- WHEN the user chooses to generate specs during init
+- THEN the system explores the codebase and creates domain-based spec files
+
+#### Scenario: Idempotent initialization
+- GIVEN a repository already initialized with delta-spec
+- WHEN the user runs `/ds:init`
+- THEN the system detects existing structure and asks before overwriting
+
+### Requirement: Start New Change
+The system SHALL provide a `/ds:new <name>` command that creates a proposal for a new change.
+
+#### Scenario: Create proposal
+- GIVEN an initialized repository
+- WHEN the user runs `/ds:new add-feature`
+- THEN the system creates `specs/.delta/add-feature/proposal.md`
+- AND works interactively with the user to define the problem and scope
+
+#### Scenario: Reopen existing proposal
+- GIVEN a change with an existing proposal
+- WHEN the user runs `/ds:new add-feature`
+- THEN the system reopens the proposal for refinement
+
+### Requirement: Plan Change
+The system SHALL provide a `/ds:plan [name]` command that creates design documents and delta specs.
+
+#### Scenario: Create design from proposal
+- GIVEN a change with a completed proposal
+- WHEN the user runs `/ds:plan`
+- THEN the system explores the codebase for context
+- AND creates `design.md` with technical approach
+- AND generates delta specs in `specs/.delta/<name>/specs/`
+
+#### Scenario: Dependency warning
+- GIVEN a change that depends on another unarchived change
+- WHEN the user runs `/ds:plan`
+- THEN the system warns about unsatisfied dependencies
+- AND asks whether to proceed or defer
+
+### Requirement: Generate Tasks
+The system SHALL provide a `/ds:tasks [name]` command that creates implementation tasks, supporting both single-change and multi-change modes.
+
+#### Scenario: Create native tasks
+- GIVEN a change with design and delta specs
+- WHEN the user runs `/ds:tasks`
+- THEN the system creates tasks using Claude Code's native TaskCreate tool
+- AND each task references specific file paths
+- AND tasks are ordered by dependency
+
+#### Scenario: No task files
+- GIVEN any state
+- WHEN the user runs `/ds:tasks`
+- THEN the system MUST NOT create a `tasks.md` file
+
+#### Scenario: Single change by name
+- GIVEN multiple planned changes
+- WHEN the user runs `/ds:tasks my-change`
+- THEN the system creates tasks only for the named change
+
+#### Scenario: All changes mode
+- GIVEN multiple changes with design and delta specs
+- WHEN the user runs `/ds:tasks` without a name
+- THEN the system creates tasks for all planned changes in dependency order
+
+#### Scenario: Dependency ordering
+- GIVEN changes A depends on B, and C is independent
+- WHEN processing all changes
+- THEN the system orders tasks as: C first, then B, then A
+- OR orders as: B first, then A, then C (independent changes can be anywhere)
+
+#### Scenario: Skip unplanned changes
+- GIVEN a change with only a proposal (no design or specs)
+- WHEN processing all changes
+- THEN the system skips that change
+- AND notes it was skipped because planning is incomplete
+
+#### Scenario: Grouped output
+- GIVEN multiple changes being processed
+- WHEN creating tasks
+- THEN tasks are grouped by change with clear headers
+- AND tasks are numbered sequentially across all changes
+
+#### Scenario: Cycle detection
+- GIVEN changes with circular dependencies
+- WHEN attempting to order changes
+- THEN the system warns about the cycle
+- AND asks the user to resolve the dependency issue
+
+### Requirement: Archive Change
+The system SHALL provide a `/ds:archive [name]` command that safely merges delta specs and archives the change.
+
+#### Scenario: Merge and archive
+- GIVEN a change with delta specs
+- WHEN the user runs `/ds:archive`
+- THEN the system validates all references first
+- AND merges deltas into main specs
+- AND moves the change to `specs/.delta/archive/YYYY-MM-DD-<name>/`
+
+#### Scenario: Show diff before writing
+- GIVEN delta specs to merge
+- WHEN archiving a change
+- THEN the system shows the diff before writing to main specs
+
+#### Scenario: Pre-validation of references
+- GIVEN a delta spec with MODIFIED or REMOVED operations
+- WHEN the user runs `/ds:archive`
+- THEN the system verifies all referenced requirements exist in main specs
+- AND stops with an error if any reference is invalid
+- AND no files are modified if validation fails
+
+#### Scenario: Pre-validation of additions
+- GIVEN a delta spec with ADDED operations
+- WHEN the user runs `/ds:archive`
+- THEN the system verifies no added requirements already exist
+- AND stops with an error if a duplicate would be created
+
+#### Scenario: Conflict check
+- GIVEN another active change also modifies the same requirement
+- WHEN the user runs `/ds:archive`
+- THEN the system warns about the conflict
+- AND asks to proceed or resolve conflicts first
+
+#### Scenario: Interactive confirmation
+- GIVEN diffs have been shown
+- WHEN the user is prompted to confirm
+- THEN the system asks "Apply these changes? [y/N]"
+- AND requires explicit "y" to proceed
+- AND cancels on empty input or "n"
+
+#### Scenario: Confirmation summary
+- GIVEN multiple spec files will be modified
+- WHEN showing the confirmation prompt
+- THEN the system lists all files that will be changed
+
+### Requirement: Drop Change
+The system SHALL provide a `/ds:drop [name]` command that abandons a change.
+
+#### Scenario: Permanent deletion
+- GIVEN an active change
+- WHEN the user runs `/ds:drop`
+- THEN the system permanently deletes `specs/.delta/<name>/`
+- AND the change is NOT archived
+
+#### Scenario: Dependent cleanup
+- GIVEN a change that other changes depend on
+- WHEN the user runs `/ds:drop`
+- THEN the system offers to clean references from dependent changes
+- OR cascade delete all dependents
+
+### Requirement: Show Status
+The system SHALL provide a `/ds:status` command that shows all active changes with conflicts, progress, and dependency visualization.
+
+#### Scenario: List changes with status
+- GIVEN active changes in specs/.delta/
+- WHEN the user runs `/ds:status`
+- THEN the system lists each change with artifacts, dependencies, and next steps
+
+#### Scenario: Version mismatch warning
+- GIVEN a version mismatch between project and plugin
+- WHEN the user runs `/ds:status`
+- THEN the system shows a warning about the mismatch
+
+#### Scenario: Conflict detection
+- GIVEN two active changes both MODIFY the same requirement
+- WHEN the user runs `/ds:status`
+- THEN the system displays a conflict warning showing which changes overlap
+
+#### Scenario: No conflicts
+- GIVEN active changes with no overlapping requirement modifications
+- WHEN the user runs `/ds:status`
+- THEN the system does not display conflict warnings
+
+#### Scenario: Progress tracking
+- GIVEN tasks were created via `/ds:tasks` for a change
+- WHEN the user runs `/ds:status`
+- THEN the system shows task completion progress (e.g., "3/5 tasks")
+
+#### Scenario: No tasks
+- GIVEN no tasks exist for a change
+- WHEN the user runs `/ds:status`
+- THEN the system shows "No tasks" or omits progress line
+
+#### Scenario: Dependency graph
+- GIVEN multiple active changes with dependencies
+- WHEN the user runs `/ds:status`
+- THEN the system displays an ASCII dependency tree showing relationships
+
+#### Scenario: Independent changes in graph
+- GIVEN changes with no dependencies
+- WHEN displaying the dependency graph
+- THEN independent changes are shown as separate roots
+
+### Requirement: View Specifications
+The system SHALL provide a `/ds:spec [domain|search]` command to view, discuss, or search specs.
+
+#### Scenario: List all specs
+- GIVEN specs exist in the specs directory
+- WHEN the user runs `/ds:spec` without arguments
+- THEN the system lists all spec files (excluding .delta/)
+
+#### Scenario: View specific domain
+- GIVEN a domain spec exists
+- WHEN the user runs `/ds:spec auth`
+- THEN the system reads and discusses the auth specification
+
+#### Scenario: Search by keyword
+- GIVEN specs exist with requirements
+- WHEN the user runs `/ds:spec "authentication"`
+- THEN the system searches all spec files for matching requirements
+- AND displays results grouped by spec file with requirement name and context
+
+#### Scenario: Search vs domain detection
+- GIVEN a search term that does not match any spec filename
+- WHEN the user runs `/ds:spec <term>`
+- THEN the system treats it as a search term
+
+#### Scenario: Case insensitive search
+- GIVEN a spec contains "Authentication" (capitalized)
+- WHEN the user runs `/ds:spec "authentication"` (lowercase)
+- THEN the system finds the match
+
+### Requirement: Change Inference
+The system SHALL infer the current change when name is omitted from commands.
+
+#### Scenario: Single active change
+- GIVEN exactly one change in specs/.delta/
+- WHEN the user runs a command without a name
+- THEN the system uses that change
+
+#### Scenario: Multiple changes
+- GIVEN multiple changes in specs/.delta/
+- WHEN the user runs a command without a name and it cannot be inferred
+- THEN the system asks the user to pick
+
+#### Scenario: No active changes
+- GIVEN no changes in specs/.delta/
+- WHEN the user runs a command requiring a change
+- THEN the system tells the user to run `/ds:new` first

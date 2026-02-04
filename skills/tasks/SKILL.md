@@ -21,13 +21,37 @@ Check `specs/.delta-spec.json` for version compatibility:
   > - **Continue anyway** - Use current commands without migrating
   > - **Cancel** - Stop and review changes first
 
-## Step 1: Determine which change
+## Step 1: Determine which change(s)
 
-- If `name` provided → use it
-- If inferable from conversation → use it
-- If only one change in `specs/.delta/` → use it
-- If multiple and not inferable → ask user
-- If none → tell user to run `/ds:new` first
+- If `name` provided → use `specs/.delta/<name>/` (single change mode)
+- If only one planned change (has design+specs) → use it
+- If multiple planned changes and no name → **process all in dependency order** (multi-change mode)
+- If none planned → tell user to run `/ds:plan` first
+
+### Multi-Change Mode
+
+When processing multiple changes:
+
+1. **Identify planned changes** - Only include changes with `design.md` AND `specs/` directory
+2. **Build dependency graph** - Parse Dependencies section from each proposal
+3. **Topological sort** - Independent changes first, then dependents in order
+4. **Detect cycles** - If circular dependencies found, warn and ask user to resolve
+5. **Process sequentially** - Create tasks for each change in order
+
+### Output Format for Multi-Change
+
+```
+=== Tasks for: change-a (1 of 3) ===
+[tasks 1-N]
+
+=== Tasks for: change-b (2 of 3) ===
+[tasks N+1-M]
+
+=== Tasks for: change-c (3 of 3) ===
+[tasks M+1-...]
+```
+
+Tasks are numbered sequentially across all changes.
 
 ## Step 2: Build context
 

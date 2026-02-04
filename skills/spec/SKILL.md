@@ -1,19 +1,50 @@
 ---
 name: spec
-description: This skill should be used when the user asks to "view specs", "show specifications", "what does the spec say", or wants to read and discuss current specifications. List all specs or read a specific domain spec.
+description: This skill should be used when the user asks to "view specs", "show specifications", "what does the spec say", "search specs", or wants to read, discuss, or search current specifications.
 version: 0.0.1
 license: MIT
 ---
 
-# /ds:spec [domain] - View or discuss specs
+# /ds:spec [domain|search] - View, discuss, or search specs
 
-View and discuss current specifications.
+View, discuss, or search current specifications.
 
 ## Behavior
 
 - **No args:** List all specs in `specs/` (excluding `.delta/`)
-- **With domain:** Read and discuss that specific spec
+- **With domain:** Read and discuss that specific spec (if `specs/<arg>.md` exists)
+- **With search term:** Search all specs for matching requirements (if no matching file)
 - Answer questions about current system behavior based on specs
+
+## Search Mode
+
+When the argument does not match an existing spec filename:
+
+1. Treat the argument as a search term
+2. Scan all `specs/*.md` files (excluding `.delta/`)
+3. Search in:
+   - Requirement names (`### Requirement: <Name>`)
+   - Requirement body text
+   - Scenario names and content
+4. Use **case-insensitive** matching
+
+### Search Output Format
+
+```
+Search results for "authentication":
+
+commands.md
+  → Requirement: Initialize Repository
+    "...creates the specs directory structure..."
+
+workflow.md
+  → Requirement: Dependency Enforcement
+    "...authentication flow depends on..."
+
+Found 2 matches in 2 files.
+```
+
+Group results by spec file, show requirement name and matching excerpt.
 
 ## Spec Format Reference
 

@@ -71,3 +71,32 @@ Add `!` after type/scope:
 ```
 feat(spec)!: change requirement header format
 ```
+
+## Learnings
+
+**Always update this section** when discovering workflow insights, gotchas, or best practices while using delta-spec.
+
+### Planning vs Implementation Dependencies
+Dependencies declared in proposals are **informational during planning** but **enforced during implementation**:
+- `/ds:plan` - Notes dependencies, proceeds without blocking (planning is safe)
+- `/ds:tasks` - Warns about unsatisfied dependencies (implementation order matters)
+- `/ds:archive` - Warns about unsatisfied dependencies (merge order matters)
+
+This allows batch planning of multiple dependent changes in sequence.
+
+### Batch Workflow Pattern
+When planning multiple related changes:
+1. Create all proposals first (`/ds:new` for each)
+2. Plan all changes in dependency order (`/ds:plan` for each)
+3. Create tasks for all changes (`/ds:tasks` - processes in dependency order)
+4. Implement and archive in dependency order
+
+### Task Ordering for Multiple Changes
+When `/ds:tasks` is run without a name and multiple planned changes exist:
+1. Independent changes (no dependencies) are processed first
+2. Dependent changes follow in topological order
+3. Tasks are numbered sequentially across all changes
+4. Changes with only proposals (not yet planned) are skipped
+
+### Dogfooding
+When improving delta-spec itself, use delta-spec to track the changes. This validates the workflow and catches friction points.

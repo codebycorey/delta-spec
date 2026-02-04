@@ -37,12 +37,42 @@ Check `specs/.delta-spec.json` for version compatibility:
   - Ask to proceed anyway or archive dependency first
 - Archiving out of order may result in specs that reference requirements that don't exist yet
 
-## Step 3: Merge delta specs
+## Step 2.5: Pre-validate References
+
+Before showing any diffs, validate all delta operations:
+
+1. Parse all delta specs in `specs/.delta/<name>/specs/`
+2. For each MODIFIED/REMOVED requirement:
+   - Check if requirement exists in corresponding main spec
+   - If not found, error: "Cannot modify 'X': requirement not found in specs/Y.md"
+3. For each ADDED requirement:
+   - Check if requirement already exists in main spec
+   - If found, error: "Cannot add 'X': requirement already exists in specs/Y.md"
+4. If any validation fails, stop immediately - **no files are modified**
+
+## Step 2.6: Check for Conflicts
+
+Before proceeding with merge:
+
+1. Scan other active changes in `specs/.delta/` for overlapping modifications
+2. For each delta spec, check if another change also MODIFIES or REMOVES the same requirement
+3. If conflict found:
+   - Warn: "Conflict: 'X' is also modified by change 'Y'"
+   - Ask: "Proceed anyway or resolve conflict first?"
+4. Uses same conflict detection logic as `/ds:status`
+
+## Step 3: Merge delta specs with confirmation
 
 For each delta spec in `specs/.delta/<name>/specs/`:
 - Read the corresponding main spec in `specs/` (or create if new)
 - Apply delta operations in order: RENAMED → REMOVED → MODIFIED → ADDED
-- Show the diff and confirm before writing
+- Show the diff for all files
+
+After showing all diffs, require explicit confirmation:
+1. Show summary: "Will modify: commands.md, workflow.md"
+2. Ask: "Apply these changes? [y/N]"
+3. **Default to No** - empty input or "n" cancels
+4. Only proceed on explicit "y" or "yes"
 
 ## Step 4: Archive
 

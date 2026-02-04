@@ -35,14 +35,14 @@ Check `specs/.delta-spec.json` for version compatibility:
 - Read `design.md` if it exists (for refinement)
 - Read existing delta specs if any
 
-## Step 2b: Check dependencies
+## Step 2b: Note dependencies (informational)
 
 - Parse Dependencies section from proposal
 - For each dependency, check if it exists in `archive/` (satisfied) or `specs/.delta/` (not satisfied)
-- If unsatisfied dependencies:
-  - Warn user: "This change depends on `<name>` which hasn't been archived yet."
-  - Ask if they want to proceed anyway or work on the dependency first
-- If all satisfied or user chooses to proceed → continue
+- If unsatisfied dependencies exist:
+  - Note to user: "Dependencies: `<name>` (not yet archived)"
+  - **Proceed without asking** - planning is safe and doesn't require dependencies
+- Planning can always proceed; dependencies are enforced at `/ds:tasks` and `/ds:archive`
 
 ## Step 3: Explore the codebase
 

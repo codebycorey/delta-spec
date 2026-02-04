@@ -1,12 +1,14 @@
 ---
-description: View and discuss specifications
-argument-hint: [domain]
+description: View, discuss, or search specifications
+argument-hint: [domain|search]
 ---
 
-View and discuss current specifications.
+View, discuss, or search current specifications.
 
-**Input**: $ARGUMENTS (optional domain name to view specific spec)
+**Input**: $ARGUMENTS (optional domain name to view, or search term to find requirements)
 
-Lists all specs in `specs/` or reads and discusses a specific domain spec.
+- No args: Lists all specs in `specs/`
+- Domain name: Reads and discusses that specific spec
+- Search term: Finds matching requirements across all specs
 
 Use the spec skill to execute this workflow.

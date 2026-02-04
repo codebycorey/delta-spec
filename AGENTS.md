@@ -22,6 +22,7 @@ This project uses delta-spec for specification-driven development.
 3. **Codebase-aware planning** - `/ds:plan` explores actual code to fit approach
 4. **Native tasks** - Use Claude Code's TaskCreate, not task files
 5. **Archive preserves context** - Completed changes kept in `specs/.delta/archive/`
+6. **Keep README in sync** - After any changes to commands, workflow, or features, update README.md to match
 
 ## Spec Domains
 
@@ -100,3 +101,13 @@ When `/ds:tasks` is run without a name and multiple planned changes exist:
 
 ### Dogfooding
 When improving delta-spec itself, use delta-spec to track the changes. This validates the workflow and catches friction points.
+
+### README Synchronization
+After making changes, check if README.md needs updates. Key sections to verify:
+- **Commands table** - Must match available `/ds:*` commands
+- **Workflow diagram** - Must reflect current command flow
+- **Project Structure** - Must match actual directory layout
+- **Installation** - Must reflect current setup process
+- **How It Works** - Examples should use current syntax
+
+When in doubt, read README.md and compare against the change you just made.

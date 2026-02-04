@@ -34,6 +34,24 @@ After installation, run `/help` to see the `ds:` commands listed under plugin co
 2. Run `/ds:init` to initialize the `specs/` directory
 3. Run `/ds:new my-first-feature` to begin your first change
 
+### Recommended: Add to AGENTS.md
+
+To ensure Claude consistently uses delta-spec for planning and feature work, add this to your project's `AGENTS.md`:
+
+```markdown
+## Development Workflow
+
+This project uses delta-spec for spec-driven development.
+
+- Before implementing new features, run `/ds:new <feature-name>` to create a proposal
+- Use `/ds:plan` to explore the codebase and create design specs before coding
+- Run `/ds:tasks` to generate implementation tasks
+- After completing work, run `/ds:archive` to merge specs
+- Check `/ds:status` to see active changes and their progress
+```
+
+This gives Claude context about your preferred workflow so it proactively uses the spec-driven approach when planning new features.
+
 ## Commands
 
 | Command | Description |

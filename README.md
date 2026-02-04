@@ -181,6 +181,10 @@ delta-spec/
 └── specs/                # Example specs directory
 ```
 
+## Inspiration
+
+Delta-Spec was inspired by [OpenSpec](https://github.com/Fission-AI/OpenSpec), a spec-driven development (SDD) framework for AI coding assistants by Fission AI.
+
 ## License
 
 MIT

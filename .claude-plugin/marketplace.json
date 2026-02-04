@@ -11,7 +11,7 @@
   "plugins": [
     {
       "name": "ds",
-      "source": ".",
+      "source": ".claude-plugin",
       "description": "Spec-driven development with delta-based specifications"
     }
   ]

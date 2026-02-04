@@ -56,14 +56,14 @@ This gives Claude context about your preferred workflow so it proactively uses t
 
 | Command | Description |
 |---------|-------------|
-| `/ds:init` | Initialize delta-spec in a repository |
+| `/ds:init` | Initialize delta-spec (optionally generate specs from existing code) |
 | `/ds:new <name>` | Start a new change with a proposal |
 | `/ds:plan [name]` | Create design and delta specs |
-| `/ds:tasks [name]` | Create implementation tasks |
-| `/ds:archive [name]` | Merge delta specs and archive change |
+| `/ds:tasks [name]` | Create tasks for one or all planned changes |
+| `/ds:archive [name]` | Safely merge delta specs and archive change |
 | `/ds:drop [name]` | Abandon a change and clean up dependencies |
-| `/ds:spec [domain]` | View and discuss specifications |
-| `/ds:status` | Show active changes |
+| `/ds:spec [domain\|search]` | View, discuss, or search specifications |
+| `/ds:status` | Show active changes with conflicts and progress |
 
 ## Workflow
 

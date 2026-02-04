@@ -2,6 +2,25 @@
 
 This project uses delta-spec for specification-driven development.
 
+## Development Workflow
+
+**Always use delta-spec when developing this project.** This ensures we dogfood our own tool and catch issues early.
+
+### For New Features or Changes
+1. Run `/ds:new <feature-name>` to create a proposal
+2. Run `/ds:plan` to explore the codebase and create design specs
+3. Run `/ds:tasks` to generate implementation tasks
+4. Implement the changes
+5. Run `/ds:archive` to merge specs when complete
+
+### For Bug Fixes
+- Small fixes: Implement directly
+- Larger fixes that change behavior: Use `/ds:new` → `/ds:plan` → `/ds:tasks` flow
+
+### Before Starting Any Work
+- Run `/ds:status` to check for active changes
+- Review existing proposals in `specs/.delta/` to avoid conflicts
+
 ## Commands
 
 | Command | Description |
@@ -100,7 +119,13 @@ When `/ds:tasks` is run without a name and multiple planned changes exist:
 4. Changes with only proposals (not yet planned) are skipped
 
 ### Dogfooding
-When improving delta-spec itself, use delta-spec to track the changes. This validates the workflow and catches friction points.
+When improving delta-spec itself, **always** use delta-spec to track the changes. This:
+- Validates the workflow works as intended
+- Catches friction points and UX issues
+- Ensures specs stay up to date with the codebase
+- Demonstrates the value of spec-driven development
+
+If a workflow feels awkward while dogfooding, that's a signal to improve it.
 
 ### README Synchronization
 After making changes, check if README.md needs updates. Key sections to verify:

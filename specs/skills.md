@@ -31,7 +31,7 @@ The system SHALL provide a `/ds-init` skill that creates the specs directory str
 - THEN the system detects existing structure and asks before overwriting
 
 ### Requirement: Start New Change
-The system SHALL provide a `/ds-new <name>` skill that creates a proposal for a new change.
+The system SHALL provide a `/ds-new <name>` skill that creates a proposal for a new change, with cycle detection and resolution.
 
 #### Scenario: Create proposal
 - GIVEN an initialized repository
@@ -43,6 +43,33 @@ The system SHALL provide a `/ds-new <name>` skill that creates a proposal for a 
 - GIVEN a change with an existing proposal
 - WHEN the user runs `/ds-new add-feature`
 - THEN the system reopens the proposal for refinement
+
+#### Scenario: Cycle detection on dependency declaration
+- GIVEN the user declares dependencies that create a cycle with existing changes
+- WHEN validating the dependency graph
+- THEN the system detects the cycle before finalizing the proposal
+
+#### Scenario: Cycle resolution in new
+- GIVEN a cycle is detected during `/ds-new`
+- WHEN prompting the user
+- THEN the system shows the cycle and suggests extraction
+- AND lists existing proposals that have artifacts to remove
+- AND asks "Extract '<name>' as base change? [y/N]"
+
+#### Scenario: Cycle resolution accepted in new
+- GIVEN the user confirms cycle resolution with "y"
+- WHEN resolving the cycle
+- THEN the system creates the base proposal
+- AND updates the new proposal's dependencies
+- AND updates existing proposals' dependencies
+- AND removes design.md and tasks.md from affected existing proposals
+- AND runs `/ds-plan` for all affected changes in dependency order
+
+#### Scenario: Cycle resolution declined in new
+- GIVEN the user declines cycle resolution
+- WHEN resolution is declined
+- THEN the system asks user to remove a dependency from their proposal
+- AND proceeds only after cycle is broken
 
 ### Requirement: Plan Change
 The system SHALL provide a `/ds-plan [name]` skill that creates design documents and delta specs.
@@ -61,7 +88,7 @@ The system SHALL provide a `/ds-plan [name]` skill that creates design documents
 - AND asks whether to proceed or defer
 
 ### Requirement: Generate Tasks
-The system SHALL provide a `/ds-tasks [name]` skill that creates a `tasks.md` file, supporting both single-change and multi-change modes.
+The system SHALL provide a `/ds-tasks [name]` skill that creates a `tasks.md` file, supporting both single-change and multi-change modes, with cycle detection.
 
 #### Scenario: Create task file
 - GIVEN a change with design and delta specs
@@ -111,14 +138,16 @@ The system SHALL provide a `/ds-tasks [name]` skill that creates a `tasks.md` fi
 - THEN the system skips that change
 - AND notes it was skipped because planning is incomplete
 
-#### Scenario: Cycle detection
+#### Scenario: Cycle detection in tasks
 - GIVEN changes with circular dependencies
 - WHEN attempting to order changes
 - THEN the system warns about the cycle
-- AND asks the user to resolve the dependency issue
+- AND shows the cycle path
+- AND suggests running `/ds-new` or `/ds-batch` to resolve
+- AND does not proceed until cycle is resolved
 
 ### Requirement: Archive Change
-The system SHALL provide a `/ds-archive [name]` skill that safely merges delta specs and archives the change.
+The system SHALL provide a `/ds-archive [name]` skill that safely merges delta specs and archives the change, with cycle detection.
 
 #### Scenario: Merge and archive
 - GIVEN a change with delta specs
@@ -151,6 +180,14 @@ The system SHALL provide a `/ds-archive [name]` skill that safely merges delta s
 - THEN the system warns about the conflict
 - AND asks to proceed or resolve conflicts first
 
+#### Scenario: Cycle detection in archive
+- GIVEN active changes with circular dependencies including this change
+- WHEN the user runs `/ds-archive`
+- THEN the system warns about the cycle
+- AND shows the cycle path
+- AND suggests running `/ds-new` or `/ds-batch` to resolve
+- AND asks whether to proceed anyway
+
 #### Scenario: Interactive confirmation
 - GIVEN diffs have been shown
 - WHEN the user is prompted to confirm
@@ -179,7 +216,7 @@ The system SHALL provide a `/ds-drop [name]` skill that abandons a change.
 - OR cascade delete all dependents
 
 ### Requirement: Show Status
-The system SHALL provide a `/ds-status` skill that shows all active changes with conflicts, progress from task files, and dependency visualization.
+The system SHALL provide a `/ds-status` skill that shows all active changes with conflicts, progress from task files, dependency visualization, and cycle warnings.
 
 #### Scenario: List changes with status
 - GIVEN active changes in specs/.delta/
@@ -221,6 +258,12 @@ The system SHALL provide a `/ds-status` skill that shows all active changes with
 - GIVEN changes with no dependencies
 - WHEN displaying the dependency graph
 - THEN independent changes are shown as separate roots
+
+#### Scenario: Cycle detection in status
+- GIVEN active changes with circular dependencies
+- WHEN the user runs `/ds-status`
+- THEN the system displays a cycle warning showing the cycle path
+- AND suggests running `/ds-new` or `/ds-batch` to resolve
 
 ### Requirement: View Specifications
 The system SHALL provide a `/ds-spec [domain|search]` skill to view, discuss, or search specs.
@@ -308,7 +351,7 @@ The system SHALL provide a `/ds-quick [name] ["description"]` skill that creates
 - AND asks whether to continue with that change or pick a different name
 
 ### Requirement: Batch Feature Planning
-The system SHALL provide a `/ds-batch` skill that creates multiple proposals from a single free-form description.
+The system SHALL provide a `/ds-batch` skill that creates multiple proposals from a single free-form description, with cycle detection and resolution.
 
 #### Scenario: Prompt for features
 - GIVEN an initialized repository
@@ -336,8 +379,41 @@ The system SHALL provide a `/ds-batch` skill that creates multiple proposals fro
 - WHEN inferring dependencies
 - THEN the system asks for clarification before proceeding
 
+#### Scenario: Cycle detection
+- GIVEN inferred dependencies form a cycle (A → B → C → A)
+- WHEN validating the dependency graph
+- THEN the system detects the cycle before showing confirmation
+
+#### Scenario: Cycle analysis
+- GIVEN a cycle is detected
+- WHEN analyzing the cycle
+- THEN the system examines descriptions of all changes in the cycle
+- AND identifies common concepts (terms appearing in multiple descriptions)
+- AND suggests a base change name from the common concept
+
+#### Scenario: Cycle resolution offer
+- GIVEN a cycle is detected with a suggested extraction
+- WHEN prompting the user
+- THEN the system shows the cycle and suggested extraction
+- AND lists any artifacts (design.md, tasks.md) that will be removed
+- AND asks "Extract '<name>' as base change? [y/N]"
+
+#### Scenario: Cycle resolution accepted
+- GIVEN the user confirms cycle resolution with "y"
+- WHEN resolving the cycle
+- THEN the system creates a new proposal for the base change
+- AND updates dependencies in affected proposals to point to the base
+- AND removes design.md and tasks.md from affected proposals
+- AND runs `/ds-plan` for all affected changes in dependency order
+
+#### Scenario: Cycle resolution declined
+- GIVEN the user declines cycle resolution with "n" or empty input
+- WHEN resolution is declined
+- THEN the system asks user to manually specify which dependency to remove
+- AND proceeds only after cycle is broken
+
 #### Scenario: Show dependency graph
-- GIVEN parsed features with dependencies
+- GIVEN parsed features with dependencies (no cycle)
 - WHEN displaying for confirmation
 - THEN the system shows an ASCII dependency graph
 - AND lists each feature with its inferred dependencies
@@ -348,7 +424,7 @@ The system SHALL provide a `/ds-batch` skill that creates multiple proposals fro
 - THEN the system shows arrows indicating dependency flow (e.g., "A → B → C")
 
 #### Scenario: Confirm before creating
-- GIVEN the dependency graph is displayed
+- GIVEN the dependency graph is displayed (no cycle)
 - WHEN prompting for confirmation
 - THEN the system asks "Create these proposals? [y/N]"
 - AND requires explicit "y" to proceed

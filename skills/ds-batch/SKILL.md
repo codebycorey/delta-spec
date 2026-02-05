@@ -98,6 +98,79 @@ If uncertain, ask:
 > 2. Something not in this batch (will be added to Dependencies as external)
 > 3. No dependency intended
 
+## Step 3.5: Detect and resolve cycles
+
+After inferring dependencies, check for circular dependencies before displaying the graph.
+
+### Cycle Detection Algorithm
+
+Use depth-first search with path tracking:
+
+```
+for each feature:
+  if feature creates a cycle when following dependencies:
+    return the cycle path (e.g., [auth, permissions, admin, auth])
+```
+
+A cycle exists when following dependencies leads back to a feature already in the current path.
+
+### If Cycle Detected
+
+1. **Analyze descriptions** - Collect descriptions from all features in the cycle
+2. **Find common concepts** - Tokenize descriptions, find terms appearing in multiple (excluding stop words)
+3. **Suggest extraction** - Generate a base change name from the most common term:
+   - "user" appears in auth, permissions, admin → suggest `user-model`
+   - "auth" appears frequently → suggest `auth-base`
+   - If no clear winner, ask user to name it
+
+4. **Show resolution prompt**:
+
+```
+⚠️  Cycle detected: auth → permissions → admin → auth
+
+Analysis: "user" appears in all descriptions
+Suggested: Extract "user-model" as base change
+
+This will:
+  - Create new proposal: user-model
+  - Update dependencies: auth, permissions, admin → depend on user-model
+  - Remove artifacts from: permissions (has design.md, tasks.md)
+
+Extract "user-model" as base change? [y/N]
+```
+
+### On Confirm ("y")
+
+1. Create `specs/.delta/<base-name>/proposal.md` with:
+   - Problem: extracted from common concept across descriptions
+   - Dependencies: None
+   - Changes: the shared functionality
+
+2. Update each proposal in the cycle:
+   - Change dependencies to point to the new base change
+   - Remove the dependency that was causing the cycle
+
+3. Delete invalidated artifacts:
+   - Remove `design.md` from affected changes (if exists)
+   - Remove `tasks.md` from affected changes (if exists)
+
+4. Run `/ds-plan` for all affected changes in dependency order:
+   - Plan the new base change first
+   - Then plan each updated change
+
+5. Continue to Step 4 with the resolved graph
+
+### On Decline ("n" or empty)
+
+Ask user to manually break the cycle:
+
+> Which dependency should be removed to break the cycle?
+> 1. auth → permissions (remove permissions' dependency on auth)
+> 2. permissions → admin (remove admin's dependency on permissions)
+> 3. admin → auth (remove auth's dependency on admin)
+
+After user selects, update the dependency and continue to Step 4.
+
 ## Step 4: Display dependency graph
 
 Show the parsed features and their dependencies:
@@ -221,9 +294,11 @@ If a generated name matches an existing change in `specs/.delta/`:
 
 ### Circular Dependencies
 
-If dependency inference creates a cycle:
-- Warn: "Circular dependency detected: a → b → c → a"
-- Ask user to clarify which dependency should be removed
+Handled in Step 3.5. The system will:
+- Detect the cycle and analyze descriptions for common concepts
+- Suggest extracting a base change to break the cycle
+- On confirm: create base proposal, update dependencies, clean artifacts, re-plan
+- On decline: ask user which dependency to remove manually
 
 ## Example Session
 

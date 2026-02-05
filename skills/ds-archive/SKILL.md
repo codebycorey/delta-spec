@@ -35,6 +35,26 @@ Check `specs/.delta-spec.json` for version compatibility:
   - Ask to proceed anyway or archive dependency first
 - Archiving out of order may result in specs that reference requirements that don't exist yet
 
+### Step 2.1: Check for cycles
+
+Check if this change is part of a circular dependency:
+
+1. Build dependency graph from all active changes
+2. Detect if this change is in a cycle
+
+If cycle detected:
+
+```
+⚠️  Cycle detected: this-change → other-a → other-b → this-change
+    Run /ds-new or /ds-batch to resolve the cycle.
+
+Proceed anyway? [y/N]
+```
+
+- Allow override since archiving this change might break the cycle
+- On "y": proceed with archiving (user takes responsibility)
+- On "n" or empty: stop and let user resolve the cycle first
+
 ## Step 2.5: Pre-validate References
 
 Before showing any diffs, validate all delta operations:

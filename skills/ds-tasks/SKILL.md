@@ -33,7 +33,13 @@ When processing multiple changes:
 1. **Identify planned changes** - Only include changes with `design.md` AND `specs/` directory
 2. **Build dependency graph** - Parse Dependencies section from each proposal
 3. **Topological sort** - Independent changes first, then dependents in order
-4. **Detect cycles** - If circular dependencies found, warn and ask user to resolve
+4. **Detect cycles** - If circular dependencies found:
+   ```
+   ⚠️  Cycle detected: auth → permissions → admin → auth
+       Cannot determine task order.
+       Run /ds-new or /ds-batch to resolve the cycle first.
+   ```
+   **Do not proceed** until cycle is resolved (hard block - task ordering is impossible with cycles)
 5. **Process sequentially** - Create tasks for each change in order
 
 ### Output Format for Multi-Change

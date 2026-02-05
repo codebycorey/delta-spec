@@ -56,7 +56,22 @@ If `tasks.md` doesn't exist, show "No tasks (run /ds-tasks)"
 
 ## Step 5: Show Dependency Graph
 
-Parse dependencies from all active changes and render ASCII tree:
+Parse dependencies from all active changes and render ASCII tree.
+
+### Step 5.1: Detect Cycles
+
+Before rendering the graph, check for circular dependencies:
+
+1. Build dependency graph from all active changes
+2. Use DFS with path tracking to detect cycles
+3. If cycle found, display warning before the graph:
+
+```
+⚠️  Cycle detected: auth → permissions → admin → auth
+    Run /ds-new or /ds-batch to resolve.
+```
+
+### Step 5.2: Render Graph
 
 ```
 Dependency Graph:
@@ -70,6 +85,7 @@ tasks-multi-change (independent)
 - Changes that other changes depend on are roots
 - Indent children (dependents) under their dependencies
 - Mark independent changes (no dependencies, nothing depends on them) explicitly
+- If a cycle exists, still show the graph (cycle will be visible in the structure)
 
 ## Example Output
 

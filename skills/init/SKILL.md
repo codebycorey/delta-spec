@@ -1,11 +1,13 @@
 ---
-name: ds-init
 description: Initialize delta-spec in a repository. Creates specs/ directory structure and optionally generates specs from existing code.
+disable-model-invocation: true
 ---
 
 # /ds:init - Initialize delta-spec
 
 Initialize delta-spec in a repository.
+
+**Note:** This skill performs destructive operations (creating directory structure, potentially overwriting `.delta-spec.json`) and requires explicit user invocation.
 
 ## Directory Structure
 

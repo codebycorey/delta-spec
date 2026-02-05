@@ -1,21 +1,17 @@
 ---
-name: ds-status
 description: Show active changes with progress, dependencies, and next steps.
+allowed-tools: ["Read", "Glob"]
 ---
 
 # /ds:status - Show active changes
 
 Show status of all active changes.
 
+**Note:** This skill is read-only and restricted to Read and Glob tools.
+
 ## Step 0: Version Check
 
-Check `specs/.delta-spec.json` for version compatibility:
-- If file missing → show warning that delta-spec is not initialized
-- If version mismatch → show warning in status output:
-  ```
-  ⚠️  Version mismatch: project v{old}, current v{new}
-      Run any command to migrate, or review CHANGELOG for breaking changes.
-  ```
+See [version-check.md](../_shared/version-check.md) for the standard version compatibility check procedure.
 
 ## Steps
 
@@ -52,7 +48,7 @@ For each change, read `specs/.delta/<name>/tasks.md`:
 3. Count by status (pending, in_progress, done)
 4. Display: "Progress: 2/5 done" or "Progress: 0/5 pending"
 
-If `tasks.md` doesn't exist, show "No tasks (run /ds-tasks)"
+If `tasks.md` doesn't exist, show "No tasks (run /ds:tasks)"
 
 ## Step 5: Show Dependency Graph
 
@@ -68,7 +64,7 @@ Before rendering the graph, check for circular dependencies:
 
 ```
 ⚠️  Cycle detected: auth → permissions → admin → auth
-    Run /ds-new or /ds-batch to resolve.
+    Run /ds:new or /ds:batch to resolve.
 ```
 
 ### Step 5.2: Render Graph

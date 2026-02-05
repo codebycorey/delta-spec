@@ -1,23 +1,17 @@
 ---
-name: ds-new
 description: Start a new change with a proposal. Creates proposal.md and works interactively to define problem and scope.
+argument-hint: "<name>"
 ---
 
 # /ds:new <name> - Start a new change
 
 Start a new change by creating a proposal.
 
+**Arguments:** If `$ARGUMENTS` is provided, use it as the `name` parameter. Otherwise, ask the user for a change name.
+
 ## Step 0: Version Check
 
-Check `specs/.delta-spec.json` for version compatibility:
-- If file missing → tell user to run `/ds:init` first
-- If version matches current plugin version → proceed
-- If version mismatch → warn user and offer to migrate:
-  > "This project uses delta-spec v{old}. Current version is v{new}."
-  > Options:
-  > - **Migrate** - Update to current version (may modify spec format)
-  > - **Continue anyway** - Use current commands without migrating
-  > - **Cancel** - Stop and review changes first
+See [version-check.md](../_shared/version-check.md) for the standard version compatibility check procedure.
 
 ## Steps
 
@@ -95,7 +89,7 @@ Extract "user-model" as base change? [y/N]
 2. Update the new proposal's dependencies to point to the base
 3. Update existing proposals' dependencies to point to the base
 4. Delete `design.md` and `tasks.md` from affected existing proposals
-5. Run `/ds-plan` for all affected changes in dependency order
+5. Run `/ds:plan` for all affected changes in dependency order
 
 ### On Decline ("n" or empty)
 

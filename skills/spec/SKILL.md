@@ -1,11 +1,20 @@
 ---
-name: ds-spec
 description: View, discuss, or search specifications.
+argument-hint: "[domain|search]"
+allowed-tools: ["Read", "Glob", "Grep"]
 ---
 
 # /ds:spec [domain|search] - View, discuss, or search specs
 
 View, discuss, or search current specifications.
+
+**Arguments:** If `$ARGUMENTS` is provided, use it as the `domain` or search term parameter. Otherwise, list all specs.
+
+**Note:** This skill is read-only and restricted to Read, Glob, and Grep tools.
+
+## Step 0: Version Check
+
+See [version-check.md](../_shared/version-check.md) for the standard version compatibility check procedure.
 
 ## Behavior
 

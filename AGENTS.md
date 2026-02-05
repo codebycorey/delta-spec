@@ -11,7 +11,7 @@ When the conversation shifts from discussion to implementation—phrases like:
 - "go ahead and..."
 - "update the code to..."
 
-**STOP.** Before using Edit or Write on any project file, run `/ds-new <name>` first.
+**STOP.** Before using Edit or Write on any project file, run `/ds:new <name>` first.
 
 ### Exceptions (direct edits OK)
 - Fixing typos or formatting
@@ -19,36 +19,36 @@ When the conversation shifts from discussion to implementation—phrases like:
 - CLAUDE.md or README.md updates
 
 ### Workflow
-1. `/ds-new <name>` - Create proposal
-2. `/ds-plan` - Explore codebase, create design + delta specs
-3. `/ds-tasks` - Generate implementation tasks
+1. `/ds:new <name>` - Create proposal
+2. `/ds:plan` - Explore codebase, create design + delta specs
+3. `/ds:tasks` - Generate implementation tasks
 4. Implement the changes
-5. `/ds-archive` - Merge specs when complete
+5. `/ds:archive` - Merge specs when complete
 
 ### Before Starting Any Work
-- Run `/ds-status` to check for active changes
+- Run `/ds:status` to check for active changes
 - Review existing proposals in `specs/.delta/` to avoid conflicts
 
 ## Skills
 
 | Skill | Description |
 |-------|-------------|
-| `/ds-init` | Initialize delta-spec (optionally generate specs from existing code) |
-| `/ds-new <name>` | Start a new change (creates + works on proposal) |
-| `/ds-plan [name]` | Create design + delta specs (explores codebase) |
-| `/ds-tasks [name]` | Create implementation tasks |
-| `/ds-archive [name]` | Merge delta specs and archive |
-| `/ds-drop [name]` | Abandon a change (deletes, cleans up dependencies) |
-| `/ds-spec [domain]` | View and discuss specifications |
-| `/ds-status` | See active changes |
-| `/ds-quick [name]` | Quick start: proposal → plan → tasks with one confirmation |
-| `/ds-batch` | Create multiple proposals from free-form feature descriptions |
+| `/ds:init` | Initialize delta-spec (optionally generate specs from existing code) |
+| `/ds:new <name>` | Start a new change (creates + works on proposal) |
+| `/ds:plan [name]` | Create design + delta specs (explores codebase) |
+| `/ds:tasks [name]` | Create implementation tasks |
+| `/ds:archive [name]` | Merge delta specs and archive |
+| `/ds:drop [name]` | Abandon a change (deletes, cleans up dependencies) |
+| `/ds:spec [domain]` | View and discuss specifications |
+| `/ds:status` | See active changes |
+| `/ds:quick [name]` | Quick start: proposal → plan → tasks with one confirmation |
+| `/ds:batch` | Create multiple proposals from free-form feature descriptions |
 
 ## Conventions
 
 1. **Specs are the source of truth** - Code should match specs
 2. **Delta changes** - Don't edit main specs directly, use delta format
-3. **Codebase-aware planning** - `/ds-plan` explores actual code to fit approach
+3. **Codebase-aware planning** - `/ds:plan` explores actual code to fit approach
 4. **Persistent tasks** - Use `tasks.md` files, not Claude Code's native TaskCreate
 5. **Archive preserves context** - Completed changes kept in `specs/.delta/archive/`
 6. **Keep README in sync** - After any changes to skills, workflow, or features, update README.md to match
@@ -108,24 +108,24 @@ feat(spec)!: change requirement header format
 
 ### Planning vs Implementation Dependencies
 Dependencies declared in proposals are **informational during planning** but **enforced during implementation**:
-- `/ds-plan` - Notes dependencies, proceeds without blocking (planning is safe)
-- `/ds-tasks` - Warns about unsatisfied dependencies (implementation order matters)
-- `/ds-archive` - Warns about unsatisfied dependencies (merge order matters)
+- `/ds:plan` - Notes dependencies, proceeds without blocking (planning is safe)
+- `/ds:tasks` - Warns about unsatisfied dependencies (implementation order matters)
+- `/ds:archive` - Warns about unsatisfied dependencies (merge order matters)
 
 This allows batch planning of multiple dependent changes in sequence.
 
 ### Batch Workflow Pattern
-When planning multiple related changes, use `/ds-batch`:
-1. Run `/ds-batch` and describe all features in free-form prose
+When planning multiple related changes, use `/ds:batch`:
+1. Run `/ds:batch` and describe all features in free-form prose
 2. Review the inferred dependency graph and confirm
-3. Optionally run `/ds-plan` for all when prompted
-4. Run `/ds-tasks` to generate tasks (processes in dependency order)
+3. Optionally run `/ds:plan` for all when prompted
+4. Run `/ds:tasks` to generate tasks (processes in dependency order)
 5. Implement and archive in dependency order
 
-Alternative (manual): `/ds-new` for each → `/ds-plan` for each → `/ds-tasks`
+Alternative (manual): `/ds:new` for each → `/ds:plan` for each → `/ds:tasks`
 
 ### Task Ordering for Multiple Changes
-When `/ds-tasks` is run without a name and multiple planned changes exist:
+When `/ds:tasks` is run without a name and multiple planned changes exist:
 1. Independent changes (no dependencies) are processed first
 2. Dependent changes follow in topological order
 3. Tasks are numbered sequentially across all changes
@@ -142,7 +142,7 @@ If a workflow feels awkward while dogfooding, that's a signal to improve it.
 
 ### README Synchronization
 After making changes, check if README.md needs updates. Key sections to verify:
-- **Skills table** - Must match available `/ds-*` skills
+- **Skills table** - Must match available `/ds:*` skills
 - **Workflow diagram** - Must reflect current skill flow
 - **Project Structure** - Must match actual directory layout
 - **Installation** - Must reflect current setup process

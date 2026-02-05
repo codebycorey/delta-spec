@@ -1,23 +1,20 @@
 ---
-name: ds-archive
 description: Complete a change by merging delta specs into main specs and archiving.
+argument-hint: "[name]"
+disable-model-invocation: true
 ---
 
 # /ds:archive [name] - Complete and archive a change
 
 Merge delta specs into main specs and archive the change.
 
+**Arguments:** If `$ARGUMENTS` is provided, use it as the `name` parameter. Otherwise, follow the determination logic below.
+
+**Note:** This skill performs permanent operations (merging specs) and requires explicit user invocation.
+
 ## Step 0: Version Check
 
-Check `specs/.delta-spec.json` for version compatibility:
-- If file missing → tell user to run `/ds:init` first
-- If version matches current plugin version → proceed
-- If version mismatch → warn user and offer to migrate:
-  > "This project uses delta-spec v{old}. Current version is v{new}."
-  > Options:
-  > - **Migrate** - Update to current version (may modify spec format)
-  > - **Continue anyway** - Use current commands without migrating
-  > - **Cancel** - Stop and review changes first
+See [version-check.md](../_shared/version-check.md) for the standard version compatibility check procedure.
 
 ## Step 1: Determine which change
 
@@ -46,7 +43,7 @@ If cycle detected:
 
 ```
 ⚠️  Cycle detected: this-change → other-a → other-b → this-change
-    Run /ds-new or /ds-batch to resolve the cycle.
+    Run /ds:new or /ds:batch to resolve the cycle.
 
 Proceed anyway? [y/N]
 ```

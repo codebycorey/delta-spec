@@ -1,23 +1,17 @@
 ---
-name: ds-tasks
 description: Generate implementation tasks from design and delta specs. Creates tasks.md file.
+argument-hint: "[name]"
 ---
 
 # /ds:tasks [name] - Create implementation tasks
 
 Create actionable implementation tasks based on the design and delta specs.
 
+**Arguments:** If `$ARGUMENTS` is provided, use it as the `name` parameter. Otherwise, generate tasks for all planned changes.
+
 ## Step 0: Version Check
 
-Check `specs/.delta-spec.json` for version compatibility:
-- If file missing → tell user to run `/ds:init` first
-- If version matches current plugin version → proceed
-- If version mismatch → warn user and offer to migrate:
-  > "This project uses delta-spec v{old}. Current version is v{new}."
-  > Options:
-  > - **Migrate** - Update to current version (may modify spec format)
-  > - **Continue anyway** - Use current commands without migrating
-  > - **Cancel** - Stop and review changes first
+See [version-check.md](../_shared/version-check.md) for the standard version compatibility check procedure.
 
 ## Step 1: Determine which change(s)
 
@@ -37,7 +31,7 @@ When processing multiple changes:
    ```
    ⚠️  Cycle detected: auth → permissions → admin → auth
        Cannot determine task order.
-       Run /ds-new or /ds-batch to resolve the cycle first.
+       Run /ds:new or /ds:batch to resolve the cycle first.
    ```
    **Do not proceed** until cycle is resolved (hard block - task ordering is impossible with cycles)
 5. **Process sequentially** - Create tasks for each change in order

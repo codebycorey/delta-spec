@@ -1,18 +1,17 @@
 ---
-name: ds-quick
 description: Quick start a change with minimal interaction. Creates proposal, design, and tasks with one confirmation.
+argument-hint: '[name] ["description"]'
 ---
 
 # /ds:quick [name] ["description"] - Quick start a change
 
 Create a complete change setup (proposal, design, tasks) with a single confirmation point.
 
+**Arguments:** If `$ARGUMENTS` is provided, use it as the `name` and optional `description` parameters. Otherwise, infer from conversation context.
+
 ## Step 0: Version Check
 
-Check `specs/.delta-spec.json` for version compatibility:
-- If file missing → tell user to run `/ds:init` first
-- If version matches current plugin version → proceed
-- If version mismatch → warn user and offer to migrate
+See [version-check.md](../_shared/version-check.md) for the standard version compatibility check procedure.
 
 ## Step 1: Parse arguments or infer from context
 
@@ -69,7 +68,7 @@ Display the generated proposal to the user, then ask:
 
 - On "y" or "yes" → continue to Step 5
 - On "n", empty, or anything else → stop here
-  - Tell user: "Proposal saved. You can refine it with `/ds-new <name>` or continue later with `/ds-plan`"
+  - Tell user: "Proposal saved. You can refine it with `/ds:new <name>` or continue later with `/ds:plan`"
 
 ## Step 5: Run planning (no prompts)
 
@@ -102,12 +101,12 @@ Display a summary of everything created:
 ✓ Created specs/<domain>.md
 ✓ Created tasks.md (N tasks)
 
-Ready to implement. Run `/ds-archive` when complete.
+Ready to implement. Run `/ds:archive` when complete.
 ```
 
 ## Behavior Notes
 
 - This skill is for straightforward changes where you know what you want
-- For complex changes requiring discussion, use `/ds-new` → `/ds-plan` → `/ds-tasks`
+- For complex changes requiring discussion, use `/ds:new` → `/ds:plan` → `/ds:tasks`
 - The proposal confirmation is the single gate—make sure it captures your intent
-- Archive still requires separate confirmation (`/ds-archive`)
+- Archive still requires separate confirmation (`/ds:archive`)

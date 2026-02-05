@@ -66,6 +66,7 @@ Tasks are numbered sequentially across all changes.
 - Identify exact files and functions to modify
 - Find where new code should be added
 - Understand dependencies and integration points
+- Check for test infrastructure (test directories, test configs, existing test patterns)
 
 ## Step 4: Create tasks.md file
 
@@ -75,6 +76,7 @@ Create `specs/.delta/<name>/tasks.md` with specific, actionable tasks:
 - Reference requirements being implemented
 - Order tasks by dependency (what needs to happen first)
 - All tasks start with `Status: pending` and `Owner: (unassigned)`
+- If the project has tests, include tasks for testing new or modified behavior
 
 Use the Write tool to create the task file.
 

@@ -70,6 +70,17 @@ The system SHALL provide a `/ds-tasks [name]` skill that creates a `tasks.md` fi
 - AND each task has Status, Owner, Files, and Refs fields
 - AND tasks are ordered by dependency
 
+#### Scenario: Test task generation
+- GIVEN a project with test infrastructure (test directories, test configs, existing tests)
+- WHEN the user runs `/ds-tasks`
+- THEN the system includes tasks for testing new or modified behavior
+- AND test tasks reference the appropriate test files and patterns
+
+#### Scenario: No test infrastructure
+- GIVEN a project without test infrastructure
+- WHEN the user runs `/ds-tasks`
+- THEN the system does not include test tasks
+
 #### Scenario: Task file format
 - GIVEN a task file is being generated
 - WHEN writing tasks

@@ -2,20 +2,28 @@
 
 This project uses delta-spec for specification-driven development.
 
-## Development Workflow
+## REQUIRED: Use delta-spec for all changes
 
-**Always use delta-spec when developing this project.** This ensures we dogfood our own tool and catch issues early.
+When the conversation shifts from discussion to implementation—phrases like:
+- "let's add that"
+- "make that change"
+- "can you implement..."
+- "go ahead and..."
+- "update the code to..."
 
-### For New Features or Changes
-1. Run `/ds-new <feature-name>` to create a proposal
-2. Run `/ds-plan` to explore the codebase and create design specs
-3. Run `/ds-tasks` to generate implementation tasks
+**STOP.** Before using Edit or Write on any project file, run `/ds-new <name>` first.
+
+### Exceptions (direct edits OK)
+- Fixing typos or formatting
+- Changes already tracked by an active delta-spec change
+- CLAUDE.md or README.md updates
+
+### Workflow
+1. `/ds-new <name>` - Create proposal
+2. `/ds-plan` - Explore codebase, create design + delta specs
+3. `/ds-tasks` - Generate implementation tasks
 4. Implement the changes
-5. Run `/ds-archive` to merge specs when complete
-
-### For Bug Fixes
-- Small fixes: Implement directly
-- Larger fixes that change behavior: Use `/ds-new` → `/ds-plan` → `/ds-tasks` flow
+5. `/ds-archive` - Merge specs when complete
 
 ### Before Starting Any Work
 - Run `/ds-status` to check for active changes
@@ -33,13 +41,14 @@ This project uses delta-spec for specification-driven development.
 | `/ds-drop [name]` | Abandon a change (deletes, cleans up dependencies) |
 | `/ds-spec [domain]` | View and discuss specifications |
 | `/ds-status` | See active changes |
+| `/ds-quick [name]` | Quick start: proposal → plan → tasks with one confirmation |
 
 ## Conventions
 
 1. **Specs are the source of truth** - Code should match specs
 2. **Delta changes** - Don't edit main specs directly, use delta format
 3. **Codebase-aware planning** - `/ds-plan` explores actual code to fit approach
-4. **Native tasks** - Use Claude Code's TaskCreate, not task files
+4. **Persistent tasks** - Use `tasks.md` files, not Claude Code's native TaskCreate
 5. **Archive preserves context** - Completed changes kept in `specs/.delta/archive/`
 6. **Keep README in sync** - After any changes to skills, workflow, or features, update README.md to match
 

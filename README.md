@@ -58,6 +58,7 @@ This gives Claude context about your preferred workflow so it proactively uses t
 |-------|-------------|
 | `/ds-init` | Initialize delta-spec (optionally generate specs from existing code) |
 | `/ds-new <name>` | Start a new change with a proposal |
+| `/ds-quick [name]` | Quick start: proposal → plan → tasks with one confirmation |
 | `/ds-plan [name]` | Create design and delta specs |
 | `/ds-tasks [name]` | Generate `tasks.md` file for one or all planned changes |
 | `/ds-archive [name]` | Safely merge delta specs and archive change |

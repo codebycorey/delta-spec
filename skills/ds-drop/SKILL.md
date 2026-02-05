@@ -1,8 +1,6 @@
 ---
-name: drop
-description: This skill should be used when the user asks to "drop a change", "abandon the change", "delete this change", or wants to discard a delta-spec change. Deletes the change directory and cleans up dependency references in other changes.
-version: 0.0.1
-license: MIT
+name: ds-drop
+description: Abandon a change and clean up its directory and dependency references.
 ---
 
 # /ds:drop [name] - Abandon a change

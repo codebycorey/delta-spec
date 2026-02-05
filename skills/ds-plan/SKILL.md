@@ -1,8 +1,6 @@
 ---
-name: plan
-description: This skill should be used when the user asks to "plan the change", "create a design", "write delta specs", or wants to explore the codebase and create an implementation approach. Explores codebase to create an implementation approach that fits existing patterns.
-version: 0.0.1
-license: MIT
+name: ds-plan
+description: Create design and delta specs. Explores codebase for implementation approach that fits existing patterns.
 ---
 
 # /ds:plan [name] - Create design and delta specs

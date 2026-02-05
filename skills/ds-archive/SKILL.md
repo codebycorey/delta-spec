@@ -1,8 +1,6 @@
 ---
-name: archive
-description: This skill should be used when the user asks to "archive a change", "complete the change", "merge the specs", or wants to finalize a delta-spec change. Merges delta specs into main specs and moves to archive.
-version: 0.0.1
-license: MIT
+name: ds-archive
+description: Complete a change by merging delta specs into main specs and archiving.
 ---
 
 # /ds:archive [name] - Complete and archive a change

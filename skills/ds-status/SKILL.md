@@ -1,8 +1,6 @@
 ---
-name: status
-description: This skill should be used when the user asks to "show status", "list active changes", "what changes are in progress", or wants to see the current state of delta-spec changes. Shows active changes with their status, dependencies, and next steps.
-version: 0.0.1
-license: MIT
+name: ds-status
+description: Show active changes with progress, dependencies, and next steps.
 ---
 
 # /ds:status - Show active changes

@@ -24,57 +24,57 @@ claude --plugin-dir /path/to/delta-spec
 
 ### Verify Installation
 
-After installation, run `/help` to see the `ds:` commands listed under plugin commands.
+After installation, run `/skills` to see the `ds-*` skills listed.
 
 > **Note:** Marketplace installation will be available once the plugin is published. For now, use the local installation method above.
 
 ## Getting Started
 
 1. Install delta-spec using one of the methods above
-2. Run `/ds:init` to initialize the `specs/` directory
-3. Run `/ds:new my-first-feature` to begin your first change
+2. Run `/ds-init` to initialize the `specs/` directory
+3. Run `/ds-new my-first-feature` to begin your first change
 
-### Recommended: Add to AGENTS.md
+### Recommended: Add to CLAUDE.md
 
-To ensure Claude consistently uses delta-spec for planning and feature work, add this to your project's `AGENTS.md`:
+To ensure Claude consistently uses delta-spec for planning and feature work, add this to your project's `CLAUDE.md`:
 
 ```markdown
 ## Development Workflow
 
 This project uses delta-spec for spec-driven development.
 
-- Before implementing new features, run `/ds:new <feature-name>` to create a proposal
-- Use `/ds:plan` to explore the codebase and create design specs before coding
-- Run `/ds:tasks` to generate implementation tasks
-- After completing work, run `/ds:archive` to merge specs
-- Check `/ds:status` to see active changes and their progress
+- Before implementing new features, run `/ds-new <feature-name>` to create a proposal
+- Use `/ds-plan` to explore the codebase and create design specs before coding
+- Run `/ds-tasks` to generate implementation tasks
+- After completing work, run `/ds-archive` to merge specs
+- Check `/ds-status` to see active changes and their progress
 ```
 
 This gives Claude context about your preferred workflow so it proactively uses the spec-driven approach when planning new features.
 
-## Commands
+## Skills
 
-| Command | Description |
-|---------|-------------|
-| `/ds:init` | Initialize delta-spec (optionally generate specs from existing code) |
-| `/ds:new <name>` | Start a new change with a proposal |
-| `/ds:plan [name]` | Create design and delta specs |
-| `/ds:tasks [name]` | Create tasks for one or all planned changes |
-| `/ds:archive [name]` | Safely merge delta specs and archive change |
-| `/ds:drop [name]` | Abandon a change and clean up dependencies |
-| `/ds:spec [domain\|search]` | View, discuss, or search specifications |
-| `/ds:status` | Show active changes with conflicts and progress |
+| Skill | Description |
+|-------|-------------|
+| `/ds-init` | Initialize delta-spec (optionally generate specs from existing code) |
+| `/ds-new <name>` | Start a new change with a proposal |
+| `/ds-plan [name]` | Create design and delta specs |
+| `/ds-tasks [name]` | Create tasks for one or all planned changes |
+| `/ds-archive [name]` | Safely merge delta specs and archive change |
+| `/ds-drop [name]` | Abandon a change and clean up dependencies |
+| `/ds-spec [domain\|search]` | View, discuss, or search specifications |
+| `/ds-status` | Show active changes with conflicts and progress |
 
 ## Workflow
 
 ```
-/ds:init               → Set up specs/ folder (once per repo)
-/ds:new add-feature    → Work on proposal (problem, scope)
-/ds:plan               → Explore codebase, create design + delta specs
-/ds:tasks              → Create implementation tasks
+/ds-init               → Set up specs/ folder (once per repo)
+/ds-new add-feature    → Work on proposal (problem, scope)
+/ds-plan               → Explore codebase, create design + delta specs
+/ds-tasks              → Create implementation tasks
 [implement]
-/ds:archive            → Merge deltas into specs, archive change
-/ds:drop               → Abandon change (if no longer needed)
+/ds-archive            → Merge deltas into specs, archive change
+/ds-drop               → Abandon change (if no longer needed)
 ```
 
 ## Project Structure
@@ -123,7 +123,7 @@ Claude creates tasks from your specs. Work through them.
 
 ### 4. Archive
 
-Run `/ds:archive` - Claude applies your deltas to the main specs.
+Run `/ds-archive` - Claude applies your deltas to the main specs.
 
 ### 5. Commit
 
@@ -150,9 +150,9 @@ claude --plugin-dir /path/to/delta-spec
 ```
 
 Then verify skills work:
-- `/ds:status` - Should show active changes (or none)
-- `/ds:spec` - Should list spec files
-- `/ds:init` - Should detect if already initialized
+- `/ds-status` - Should show active changes (or none)
+- `/ds-spec` - Should list spec files
+- `/ds-init` - Should detect if already initialized
 
 ### Validating Specs
 
@@ -175,8 +175,7 @@ delta-spec/
 ├── .claude-plugin/       # Plugin manifest
 │   ├── plugin.json       # Plugin definition (name, version)
 │   └── marketplace.json  # Marketplace metadata
-├── commands/ds/          # Slash command entry points
-├── skills/               # Detailed skill implementations
+├── skills/               # Skill implementations
 ├── scripts/              # Utility scripts
 └── specs/                # Example specs directory
 ```

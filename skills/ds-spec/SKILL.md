@@ -1,8 +1,6 @@
 ---
-name: spec
-description: This skill should be used when the user asks to "view specs", "show specifications", "what does the spec say", "search specs", or wants to read, discuss, or search current specifications.
-version: 0.0.1
-license: MIT
+name: ds-spec
+description: View, discuss, or search specifications.
 ---
 
 # /ds:spec [domain|search] - View, discuss, or search specs

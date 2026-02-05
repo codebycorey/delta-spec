@@ -1,8 +1,6 @@
 ---
-name: tasks
-description: This skill should be used when the user asks to "create tasks", "generate implementation tasks", "what should I work on", or wants to break down a change into actionable work items. Explores codebase and uses TaskCreate for native task tracking.
-version: 0.0.1
-license: MIT
+name: ds-tasks
+description: Generate implementation tasks from design and delta specs. Uses Claude Code's native TaskCreate.
 ---
 
 # /ds:tasks [name] - Create implementation tasks

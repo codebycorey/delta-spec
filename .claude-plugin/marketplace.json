@@ -5,9 +5,7 @@
   "owner": {
     "name": "codebycorey"
   },
-  "metadata": {
-    "description": "A minimal, Claude Code-native system for specification-driven development using delta specs"
-  },
+  "metadata": {},
   "plugins": [
     {
       "name": "ds",

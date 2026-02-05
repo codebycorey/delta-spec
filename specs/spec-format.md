@@ -1,8 +1,3 @@
----
-generated: true
-generated_at: 2026-02-03
----
-
 # Spec Format Specification
 
 ## Purpose

@@ -42,6 +42,7 @@ When the conversation shifts from discussion to implementation—phrases like:
 | `/ds-spec [domain]` | View and discuss specifications |
 | `/ds-status` | See active changes |
 | `/ds-quick [name]` | Quick start: proposal → plan → tasks with one confirmation |
+| `/ds-batch` | Create multiple proposals from free-form feature descriptions |
 
 ## Conventions
 
@@ -114,11 +115,14 @@ Dependencies declared in proposals are **informational during planning** but **e
 This allows batch planning of multiple dependent changes in sequence.
 
 ### Batch Workflow Pattern
-When planning multiple related changes:
-1. Create all proposals first (`/ds-new` for each)
-2. Plan all changes in dependency order (`/ds-plan` for each)
-3. Create tasks for all changes (`/ds-tasks` - processes in dependency order)
-4. Implement and archive in dependency order
+When planning multiple related changes, use `/ds-batch`:
+1. Run `/ds-batch` and describe all features in free-form prose
+2. Review the inferred dependency graph and confirm
+3. Optionally run `/ds-plan` for all when prompted
+4. Run `/ds-tasks` to generate tasks (processes in dependency order)
+5. Implement and archive in dependency order
+
+Alternative (manual): `/ds-new` for each → `/ds-plan` for each → `/ds-tasks`
 
 ### Task Ordering for Multiple Changes
 When `/ds-tasks` is run without a name and multiple planned changes exist:

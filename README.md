@@ -22,61 +22,76 @@ git clone https://github.com/codebycorey/delta-spec.git
 claude --plugin-dir /path/to/delta-spec
 ```
 
+> **Note:** You must use `--plugin-dir` each time you launch Claude Code to load the plugin. This is required until the plugin is installed from the marketplace.
+
 ### Verify Installation
 
-After installation, run `/skills` to see the `ds-*` skills listed.
+After installation, run `/skills` to see the `ds` plugin skills listed (e.g., `/ds:init`, `/ds:new`, `/ds:plan`).
 
-> **Note:** Marketplace installation will be available once the plugin is published. For now, use the local installation method above.
+> **Note:** Marketplace installation is not yet available. Once published, you will be able to install with `/plugin install ds`.
 
 ## Getting Started
 
 1. Install delta-spec using one of the methods above
-2. Run `/ds-init` to initialize the `specs/` directory
-3. Run `/ds-new my-first-feature` to begin your first change
+2. Run `/ds:init` to initialize the `specs/` directory
+3. Run `/ds:new my-first-feature` to begin your first change
 
 ### Recommended: Add to CLAUDE.md
 
-To ensure Claude consistently uses delta-spec for planning and feature work, add this to your project's `CLAUDE.md`:
+To ensure Claude consistently uses delta-spec for all feature work, add this to your project's `CLAUDE.md`:
 
-```markdown
-## Development Workflow
+````markdown
+## REQUIRED: Use delta-spec for all changes
 
-This project uses delta-spec for spec-driven development.
+When the conversation shifts from discussion to implementation—phrases like:
+- "let's add that"
+- "make that change"
+- "can you implement..."
+- "go ahead and..."
+- "update the code to..."
 
-- Before implementing new features, run `/ds-new <feature-name>` to create a proposal
-- Use `/ds-plan` to explore the codebase and create design specs before coding
-- Run `/ds-tasks` to generate a `tasks.md` file with implementation tasks
-- After completing work, run `/ds-archive` to merge specs
-- Check `/ds-status` to see active changes and their progress
-```
+**STOP.** Before using Edit or Write on any project file, run `/ds:new <name>` first.
 
-This gives Claude context about your preferred workflow so it proactively uses the spec-driven approach when planning new features.
+### Exceptions (direct edits OK)
+- Fixing typos or formatting
+- Changes already tracked by an active delta-spec change
+- CLAUDE.md or README.md updates
+
+### Workflow
+1. `/ds:new <name>` - Create proposal
+2. `/ds:plan` - Explore codebase, create design + delta specs
+3. `/ds:tasks` - Generate implementation tasks
+4. Implement the changes
+5. `/ds:archive` - Merge specs when complete
+````
+
+This assertive pattern ensures Claude pauses and uses the spec-driven workflow instead of directly editing files.
 
 ## Skills
 
 | Skill | Description |
 |-------|-------------|
-| `/ds-init` | Initialize delta-spec (optionally generate specs from existing code) |
-| `/ds-new <name>` | Start a new change with a proposal |
-| `/ds-quick [name]` | Quick start: proposal → plan → tasks with one confirmation |
-| `/ds-batch` | Create multiple proposals from free-form feature descriptions |
-| `/ds-plan [name]` | Create design and delta specs |
-| `/ds-tasks [name]` | Generate `tasks.md` file for one or all planned changes |
-| `/ds-archive [name]` | Safely merge delta specs and archive change |
-| `/ds-drop [name]` | Abandon a change and clean up dependencies |
-| `/ds-spec [domain\|search]` | View, discuss, or search specifications |
-| `/ds-status` | Show active changes with conflicts and task progress |
+| `/ds:init` | Initialize delta-spec (optionally generate specs from existing code) |
+| `/ds:new <name>` | Start a new change with a proposal |
+| `/ds:quick [name] ["description"]` | Quick start: proposal, plan, and tasks with one confirmation |
+| `/ds:batch` | Create multiple proposals from free-form feature descriptions |
+| `/ds:plan [name]` | Create design and delta specs |
+| `/ds:tasks [name]` | Generate `tasks.md` file for one or all planned changes |
+| `/ds:archive [name]` | Safely merge delta specs and archive change |
+| `/ds:drop [name]` | Abandon a change and clean up dependencies |
+| `/ds:spec [domain\|search]` | View, discuss, or search specifications |
+| `/ds:status` | Show active changes with conflicts and task progress |
 
 ## Workflow
 
 ```
-/ds-init               → Set up specs/ folder (once per repo)
-/ds-new add-feature    → Work on proposal (problem, scope)
-/ds-plan               → Explore codebase, create design + delta specs
-/ds-tasks              → Create implementation tasks
+/ds:init               → Set up specs/ folder (once per repo)
+/ds:new add-feature    → Work on proposal (problem, scope)
+/ds:plan               → Explore codebase, create design + delta specs
+/ds:tasks              → Create implementation tasks
 [implement]
-/ds-archive            → Merge deltas into specs, archive change
-/ds-drop               → Abandon change (if no longer needed)
+/ds:archive            → Merge deltas into specs, archive change
+/ds:drop               → Abandon change (if no longer needed)
 ```
 
 ## Project Structure
@@ -121,11 +136,11 @@ The system SHALL authenticate users with email and password.
 
 ### 3. Implement
 
-Run `/ds-tasks` to generate a `tasks.md` file with implementation tasks. Work through them, updating status as you go.
+Run `/ds:tasks` to generate a `tasks.md` file with implementation tasks. Work through them, updating status as you go.
 
 ### 4. Archive
 
-Run `/ds-archive` - Claude applies your deltas to the main specs.
+Run `/ds:archive` - Claude applies your deltas to the main specs.
 
 ### 5. Commit
 
@@ -152,9 +167,9 @@ claude --plugin-dir /path/to/delta-spec
 ```
 
 Then verify skills work:
-- `/ds-status` - Should show active changes (or none)
-- `/ds-spec` - Should list spec files
-- `/ds-init` - Should detect if already initialized
+- `/ds:status` - Should show active changes (or none)
+- `/ds:spec` - Should list spec files
+- `/ds:init` - Should detect if already initialized
 
 ### Validating Specs
 
@@ -169,6 +184,16 @@ This checks for:
 - RFC 2119 keywords (SHALL, MUST, SHOULD, MAY)
 - Scenarios for requirements
 - Delta operation sections (ADDED/MODIFIED/REMOVED/RENAMED)
+
+#### Limitations
+
+The validation script performs basic structural checks but does **not** validate:
+- **Requirement references** - Does not verify that MODIFIED or REMOVED operations reference existing requirements in main specs
+- **Scenario completeness** - Does not enforce that all scenarios have GIVEN-WHEN-THEN structure
+- **Cross-file consistency** - Does not check for duplicate requirement names across specs
+- **Delta merge conflicts** - Does not detect when multiple changes modify the same requirement
+
+For comprehensive validation, use `/ds:status` to detect conflicts and `/ds:archive` with pre-validation to ensure safe merging.
 
 ### Project Structure
 

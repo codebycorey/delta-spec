@@ -44,6 +44,43 @@ When the conversation shifts from discussion to implementation—phrases like:
 | `/ds:quick [name]` | Quick start: proposal → plan → tasks with one confirmation |
 | `/ds:batch` | Create multiple proposals from free-form feature descriptions |
 
+## Codebase Map
+
+Use this to orient before exploring. Reduces redundant file discovery.
+
+```
+delta-spec/
+├── .claude-plugin/
+│   ├── plugin.json            # Plugin name, version (0.1.0)
+│   └── marketplace.json       # Marketplace listing config
+├── skills/
+│   ├── _shared/
+│   │   └── version-check.md   # Shared version check procedure
+│   ├── init/SKILL.md           # /ds:init
+│   ├── new/SKILL.md            # /ds:new <name>
+│   ├── plan/SKILL.md           # /ds:plan [name]
+│   ├── tasks/SKILL.md          # /ds:tasks [name]
+│   ├── archive/SKILL.md        # /ds:archive [name]
+│   ├── drop/SKILL.md           # /ds:drop [name]
+│   ├── spec/SKILL.md           # /ds:spec [domain|search]
+│   ├── status/SKILL.md         # /ds:status
+│   ├── quick/SKILL.md          # /ds:quick [name]
+│   └── batch/SKILL.md          # /ds:batch
+├── specs/
+│   ├── .delta-spec.json        # Version tracking (0.1.0)
+│   ├── skills.md               # Skill requirements (main spec)
+│   ├── workflow.md             # Change lifecycle spec
+│   ├── spec-format.md          # Spec format definition
+│   ├── validation.md           # Validation rules spec
+│   └── .delta/
+│       └── archive/            # Completed changes (proposal + design + tasks)
+├── scripts/
+│   └── validate-specs.sh       # Spec format validation
+├── CLAUDE.md → AGENTS.md       # Symlink
+├── README.md                   # User-facing documentation
+└── CHANGELOG.md                # Release history
+```
+
 ## Conventions
 
 1. **Specs are the source of truth** - Code should match specs
@@ -52,6 +89,7 @@ When the conversation shifts from discussion to implementation—phrases like:
 4. **Persistent tasks** - Use `tasks.md` files, not Claude Code's native TaskCreate
 5. **Archive preserves context** - Completed changes kept in `specs/.delta/archive/`
 6. **Keep README in sync** - After any changes to skills, workflow, or features, update README.md to match
+7. **Keep codebase map current** - After `/ds:archive`, update the Codebase Map above if files were added, removed, or moved. Skip for content-only changes.
 
 ## Spec Domains
 

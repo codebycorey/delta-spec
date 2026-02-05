@@ -7,7 +7,7 @@ A minimal, Claude Code-native system for spec-driven development.
 Delta-Spec is a convention for managing software specifications that:
 
 - **Uses delta specs** - Describe what's changing (ADDED/MODIFIED/REMOVED) rather than rewriting entire spec files
-- **Works with Claude Code** - Leverages native task tracking and plan mode
+- **Works with Claude Code** - Integrates with plan mode, uses persistent task files
 - **No CLI required** - Claude handles parsing and merging
 - **Git-native** - Your commit history is your archive
 
@@ -45,7 +45,7 @@ This project uses delta-spec for spec-driven development.
 
 - Before implementing new features, run `/ds-new <feature-name>` to create a proposal
 - Use `/ds-plan` to explore the codebase and create design specs before coding
-- Run `/ds-tasks` to generate implementation tasks
+- Run `/ds-tasks` to generate a `tasks.md` file with implementation tasks
 - After completing work, run `/ds-archive` to merge specs
 - Check `/ds-status` to see active changes and their progress
 ```
@@ -59,11 +59,11 @@ This gives Claude context about your preferred workflow so it proactively uses t
 | `/ds-init` | Initialize delta-spec (optionally generate specs from existing code) |
 | `/ds-new <name>` | Start a new change with a proposal |
 | `/ds-plan [name]` | Create design and delta specs |
-| `/ds-tasks [name]` | Create tasks for one or all planned changes |
+| `/ds-tasks [name]` | Generate `tasks.md` file for one or all planned changes |
 | `/ds-archive [name]` | Safely merge delta specs and archive change |
 | `/ds-drop [name]` | Abandon a change and clean up dependencies |
 | `/ds-spec [domain\|search]` | View, discuss, or search specifications |
-| `/ds-status` | Show active changes with conflicts and progress |
+| `/ds-status` | Show active changes with conflicts and task progress |
 
 ## Workflow
 
@@ -119,7 +119,7 @@ The system SHALL authenticate users with email and password.
 
 ### 3. Implement
 
-Claude creates tasks from your specs. Work through them.
+Run `/ds-tasks` to generate a `tasks.md` file with implementation tasks. Work through them, updating status as you go.
 
 ### 4. Archive
 

@@ -45,13 +45,14 @@ Scan all delta specs in active changes for overlapping modifications:
 
 ## Step 4: Show Progress
 
-For each change, check Claude Code's native task list:
+For each change, read `specs/.delta/<name>/tasks.md`:
 
-1. Look for tasks with subjects referencing the change name
-2. Count by status (pending, in_progress, completed)
-3. Display: "Progress: 3/5 tasks" or "No tasks"
+1. If file exists, parse all `## Task N:` sections
+2. Extract status from `- **Status:**` line for each task
+3. Count by status (pending, in_progress, done)
+4. Display: "Progress: 2/5 done" or "Progress: 0/5 pending"
 
-Note: Progress only visible if tasks were created via `/ds:tasks` in current session.
+If `tasks.md` doesn't exist, show "No tasks (run /ds-tasks)"
 
 ## Step 5: Show Dependency Graph
 

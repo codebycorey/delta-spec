@@ -1,6 +1,6 @@
 ---
 name: ds-tasks
-description: Generate implementation tasks from design and delta specs. Uses Claude Code's native TaskCreate.
+description: Generate implementation tasks from design and delta specs. Creates tasks.md file.
 ---
 
 # /ds:tasks [name] - Create implementation tasks
@@ -67,16 +67,60 @@ Tasks are numbered sequentially across all changes.
 - Find where new code should be added
 - Understand dependencies and integration points
 
-## Step 4: Create tasks using TaskCreate
+## Step 4: Create tasks.md file
 
-- Create specific, actionable tasks
+Create `specs/.delta/<name>/tasks.md` with specific, actionable tasks:
+
 - Reference actual file paths from exploration
 - Reference requirements being implemented
 - Order tasks by dependency (what needs to happen first)
+- All tasks start with `Status: pending` and `Owner: (unassigned)`
 
-Example tasks:
-- "Add GoogleStrategy to src/auth/strategies/google.ts"
-- "Update src/auth/passport.ts to register OAuth strategies"
-- "Add OAuth callback routes to src/routes/auth.ts"
+Use the Write tool to create the task file.
 
-**IMPORTANT:** Do NOT create a tasks.md file - use Claude Code's native TaskCreate tool.
+## Task File Format
+
+```markdown
+# Tasks: <change-name>
+
+Generated: YYYY-MM-DD
+
+---
+
+## Task 1: <title>
+- **Status:** pending
+- **Owner:** (unassigned)
+- **Files:** path/to/file.ts
+- **Refs:** [Requirement Name]
+
+<description of what to do>
+
+## Task 2: <title>
+- **Status:** pending
+- **Owner:** (unassigned)
+- **Files:** path/to/other.ts
+- **Refs:** [Another Requirement]
+
+<description>
+```
+
+### Task Fields
+
+| Field | Required | Values |
+|-------|----------|--------|
+| Status | Yes | `pending`, `in_progress`, `done` |
+| Owner | Yes | Agent identifier or `(unassigned)` |
+| Files | No | Primary file(s) affected |
+| Refs | No | Links to requirements |
+
+### Updating Tasks
+
+Agents update tasks by editing the file directly:
+
+1. **Claim task:** Set `Status: in_progress` and `Owner: <agent-id>`
+2. **Complete task:** Set `Status: done` (keep owner for attribution)
+3. **Unclaim task:** Set `Status: pending` and `Owner: (unassigned)`
+
+### Multi-Change Mode
+
+When processing multiple changes, create a separate `tasks.md` for each change in its own directory.

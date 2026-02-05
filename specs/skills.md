@@ -61,47 +61,44 @@ The system SHALL provide a `/ds-plan [name]` skill that creates design documents
 - AND asks whether to proceed or defer
 
 ### Requirement: Generate Tasks
-The system SHALL provide a `/ds-tasks [name]` skill that creates implementation tasks, supporting both single-change and multi-change modes.
+The system SHALL provide a `/ds-tasks [name]` skill that creates a `tasks.md` file, supporting both single-change and multi-change modes.
 
-#### Scenario: Create native tasks
+#### Scenario: Create task file
 - GIVEN a change with design and delta specs
 - WHEN the user runs `/ds-tasks`
-- THEN the system creates tasks using Claude Code's native TaskCreate tool
-- AND each task references specific file paths
+- THEN the system creates `specs/.delta/<name>/tasks.md`
+- AND each task has Status, Owner, Files, and Refs fields
 - AND tasks are ordered by dependency
 
-#### Scenario: No task files
-- GIVEN any state
-- WHEN the user runs `/ds-tasks`
-- THEN the system MUST NOT create a `tasks.md` file
+#### Scenario: Task file format
+- GIVEN a task file is being generated
+- WHEN writing tasks
+- THEN each task has `## Task N: <title>` header
+- AND has `- **Status:** pending` field
+- AND has `- **Owner:** (unassigned)` field
+- AND may have `- **Files:**` and `- **Refs:**` fields
 
 #### Scenario: Single change by name
 - GIVEN multiple planned changes
 - WHEN the user runs `/ds-tasks my-change`
-- THEN the system creates tasks only for the named change
+- THEN the system creates `tasks.md` only for the named change
 
 #### Scenario: All changes mode
 - GIVEN multiple changes with design and delta specs
 - WHEN the user runs `/ds-tasks` without a name
-- THEN the system creates tasks for all planned changes in dependency order
+- THEN the system creates `tasks.md` for each planned change in dependency order
 
 #### Scenario: Dependency ordering
 - GIVEN changes A depends on B, and C is independent
 - WHEN processing all changes
-- THEN the system orders tasks as: C first, then B, then A
-- OR orders as: B first, then A, then C (independent changes can be anywhere)
+- THEN the system processes changes in order respecting dependencies
+- AND each change gets its own `tasks.md` file
 
 #### Scenario: Skip unplanned changes
 - GIVEN a change with only a proposal (no design or specs)
 - WHEN processing all changes
 - THEN the system skips that change
 - AND notes it was skipped because planning is incomplete
-
-#### Scenario: Grouped output
-- GIVEN multiple changes being processed
-- WHEN creating tasks
-- THEN tasks are grouped by change with clear headers
-- AND tasks are numbered sequentially across all changes
 
 #### Scenario: Cycle detection
 - GIVEN changes with circular dependencies
@@ -171,7 +168,7 @@ The system SHALL provide a `/ds-drop [name]` skill that abandons a change.
 - OR cascade delete all dependents
 
 ### Requirement: Show Status
-The system SHALL provide a `/ds-status` skill that shows all active changes with conflicts, progress, and dependency visualization.
+The system SHALL provide a `/ds-status` skill that shows all active changes with conflicts, progress from task files, and dependency visualization.
 
 #### Scenario: List changes with status
 - GIVEN active changes in specs/.delta/
@@ -193,15 +190,16 @@ The system SHALL provide a `/ds-status` skill that shows all active changes with
 - WHEN the user runs `/ds-status`
 - THEN the system does not display conflict warnings
 
-#### Scenario: Progress tracking
-- GIVEN tasks were created via `/ds-tasks` for a change
+#### Scenario: Progress from task file
+- GIVEN a change has `tasks.md` file
 - WHEN the user runs `/ds-status`
-- THEN the system shows task completion progress (e.g., "3/5 tasks")
+- THEN the system reads task statuses from the file
+- AND shows completion progress (e.g., "2/5 done")
 
-#### Scenario: No tasks
-- GIVEN no tasks exist for a change
+#### Scenario: No task file
+- GIVEN a change has no `tasks.md` file
 - WHEN the user runs `/ds-status`
-- THEN the system shows "No tasks" or omits progress line
+- THEN the system shows "No tasks" or suggests running `/ds-tasks`
 
 #### Scenario: Dependency graph
 - GIVEN multiple active changes with dependencies

@@ -23,13 +23,13 @@ validate_spec() {
     # Check for Purpose section
     if ! grep -q "^## Purpose" "$file"; then
         echo -e "  ${YELLOW}WARNING: Missing '## Purpose' section${NC}"
-        ((warnings++))
+        warnings=$((warnings + 1))
     fi
 
     # Check for Requirements section
     if ! grep -q "^## Requirements" "$file"; then
         echo -e "  ${RED}ERROR: Missing '## Requirements' section${NC}"
-        ((errors++))
+        errors=$((errors + 1))
     fi
 
     # Check that requirements have scenarios
@@ -38,13 +38,23 @@ validate_spec() {
 
     if [ "$req_count" -gt 0 ] && [ "$scenario_count" -eq 0 ]; then
         echo -e "  ${YELLOW}WARNING: $req_count requirement(s) but no scenarios${NC}"
-        ((warnings++))
+        warnings=$((warnings + 1))
     fi
 
     # Check for RFC 2119 keywords
     if ! grep -qE "(SHALL|MUST|SHOULD|MAY)" "$file"; then
         echo -e "  ${YELLOW}WARNING: No RFC 2119 keywords (SHALL/MUST/SHOULD/MAY) found${NC}"
-        ((warnings++))
+        warnings=$((warnings + 1))
+    fi
+
+    # Check for duplicate requirement names
+    local duplicates
+    duplicates=$(grep "^### Requirement:" "$file" | sed 's/^### Requirement: //' | sort | uniq -d || true)
+    if [ -n "$duplicates" ]; then
+        while IFS= read -r dup; do
+            echo -e "  ${RED}ERROR: Duplicate requirement name: $dup${NC}"
+            errors=$((errors + 1))
+        done <<< "$duplicates"
     fi
 }
 
@@ -57,7 +67,7 @@ validate_delta() {
     # Check for at least one operation section
     if ! grep -qE "^## (ADDED|MODIFIED|REMOVED|RENAMED) Requirements" "$file"; then
         echo -e "  ${RED}ERROR: No operation sections (ADDED/MODIFIED/REMOVED/RENAMED)${NC}"
-        ((errors++))
+        errors=$((errors + 1))
     fi
 
     # Check ADDED/MODIFIED have requirement content
@@ -65,9 +75,52 @@ validate_delta() {
         local added_reqs=$(sed -n '/^## ADDED Requirements/,/^## /p' "$file" | grep -c "^### Requirement:" || echo 0)
         if [ "$added_reqs" -eq 0 ]; then
             echo -e "  ${YELLOW}WARNING: ADDED section has no requirements${NC}"
-            ((warnings++))
+            warnings=$((warnings + 1))
         fi
     fi
+
+    # Check for orphaned delta spec (main spec must exist)
+    local base_name
+    base_name=$(basename "$file")
+    if [ ! -f "$SPECS_DIR/$base_name" ]; then
+        echo -e "  ${RED}ERROR: Orphaned delta spec - main spec not found${NC}"
+        echo -e "         Expected: $SPECS_DIR/$base_name"
+        errors=$((errors + 1))
+    fi
+}
+
+validate_proposal() {
+    local file="$1"
+    local filename=$(basename "$file")
+
+    echo "Checking proposal: $filename..."
+
+    # Required sections
+    local required_sections=("Problem" "Dependencies" "Changes" "Capabilities" "Out of Scope" "Success Criteria")
+
+    for section in "${required_sections[@]}"; do
+        if ! grep -q "^## $section" "$file"; then
+            echo -e "  ${RED}ERROR: Missing '## $section' section${NC}"
+            errors=$((errors + 1))
+        fi
+    done
+}
+
+validate_design() {
+    local file="$1"
+    local filename=$(basename "$file")
+
+    echo "Checking design: $filename..."
+
+    # Required sections
+    local required_sections=("Context" "Approach" "Decisions" "Files Affected" "Risks")
+
+    for section in "${required_sections[@]}"; do
+        if ! grep -q "^## $section" "$file"; then
+            echo -e "  ${RED}ERROR: Missing '## $section' section${NC}"
+            errors=$((errors + 1))
+        fi
+    done
 }
 
 echo "=== Delta-Spec Validation ==="
@@ -80,6 +133,28 @@ for spec in "$SPECS_DIR"/*.md; do
     [[ "$(basename "$spec")" == "example.md" ]] && continue
     validate_spec "$spec"
 done
+
+# Validate proposals in active changes
+if [ -d "$SPECS_DIR/.delta" ]; then
+    for change_dir in "$SPECS_DIR/.delta"/*/; do
+        [ -d "$change_dir" ] || continue
+        # Skip archive directory
+        [[ "$change_dir" == *"/archive/"* ]] && continue
+        proposal="$change_dir/proposal.md"
+        [ -f "$proposal" ] && validate_proposal "$proposal"
+    done
+fi
+
+# Validate designs in active changes
+if [ -d "$SPECS_DIR/.delta" ]; then
+    for change_dir in "$SPECS_DIR/.delta"/*/; do
+        [ -d "$change_dir" ] || continue
+        # Skip archive directory
+        [[ "$change_dir" == *"/archive/"* ]] && continue
+        design="$change_dir/design.md"
+        [ -f "$design" ] && validate_design "$design"
+    done
+fi
 
 # Validate delta specs in changes (excluding archive)
 if [ -d "$SPECS_DIR/.delta" ]; then

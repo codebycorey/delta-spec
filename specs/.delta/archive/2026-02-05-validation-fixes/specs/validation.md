@@ -1,10 +1,8 @@
-# Validation Specification
+# Delta: Validation
 
-## Purpose
+Changes for validation-fixes.
 
-Defines the validation rules for specification files, including format compliance checks and error reporting.
-
-## Requirements
+## MODIFIED Requirements
 
 ### Requirement: Main Spec Validation
 The system SHALL validate main spec files for required structure and uniqueness constraints.
@@ -25,22 +23,6 @@ The system SHALL validate main spec files for required structure and uniqueness 
 - THEN error if any requirement names are duplicated within the file
 - AND list all duplicate names found
 
-### Requirement: RFC 2119 Keyword Validation
-The system SHALL validate that specs use RFC 2119 keywords.
-
-#### Scenario: Keyword presence
-- GIVEN a main spec file with requirements
-- WHEN validated
-- THEN warn if no RFC 2119 keywords (SHALL, MUST, SHOULD, MAY) are found
-
-### Requirement: Scenario Validation
-The system SHOULD validate that requirements have scenarios.
-
-#### Scenario: Scenario presence
-- GIVEN a requirement in a spec
-- WHEN validated
-- THEN warn if the requirement has no scenarios
-
 ### Requirement: Delta Spec Validation
 The system SHALL validate delta spec files for operation structure and main spec references.
 
@@ -60,36 +42,7 @@ The system SHALL validate delta spec files for operation structure and main spec
 - THEN error if the corresponding main spec does not exist
 - AND show the expected main spec path
 
-### Requirement: Validation Output
-The system SHALL provide clear validation output with severity levels.
-
-#### Scenario: Error reporting
-- GIVEN validation errors found
-- WHEN displaying results
-- THEN show errors in red with ERROR prefix
-
-#### Scenario: Warning reporting
-- GIVEN validation warnings found
-- WHEN displaying results
-- THEN show warnings in yellow with WARNING prefix
-
-#### Scenario: Pass reporting
-- GIVEN validation passes
-- WHEN displaying results
-- THEN show success in green with PASS prefix
-
-### Requirement: Validation Exit Codes
-The system SHALL use exit codes to indicate validation result.
-
-#### Scenario: Validation passed
-- GIVEN no errors found
-- WHEN validation completes
-- THEN exit with code 0
-
-#### Scenario: Validation failed
-- GIVEN errors found
-- WHEN validation completes
-- THEN exit with code 1
+## ADDED Requirements
 
 ### Requirement: Proposal Format Validation
 The system SHALL validate proposal files for required structure.

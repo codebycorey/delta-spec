@@ -1,5 +1,5 @@
 ---
-description: Show active changes with progress, dependencies, and next steps.
+description: Show active changes with progress, dependencies, and next steps. Use when checking status, viewing active work, or reviewing the dependency graph.
 allowed-tools: ["Read", "Glob"]
 ---
 
@@ -13,18 +13,21 @@ Show status of all active changes.
 
 See [version-check.md](../_shared/version-check.md) for the standard version compatibility check procedure.
 
-## Steps
+## Step 1: List active changes
 
-1. List changes in `specs/.delta/` (excluding `archive/`)
-2. For each, read the proposal and show:
-   - Which artifacts exist (proposal? design? specs?)
-   - Brief summary from proposal
-   - Dependencies status:
-     - Check if dependencies are still in `specs/.delta/` (blocked) or `archive/` (satisfied)
-     - Show: `✓ ready` or `⏳ blocked by: <change-name>`
-   - Next step (plan? tasks? ready to archive?)
+List changes in `specs/.delta/` (excluding `archive/`).
 
-## Step 3: Detect Conflicts
+## Step 2: Show change details
+
+For each change, read the proposal and show:
+- Which artifacts exist (proposal? design? specs?)
+- Brief summary from proposal
+- Dependencies status:
+  - Check if dependencies are still in `specs/.delta/` (blocked) or `archive/` (satisfied)
+  - Show: `✓ ready` or `⏳ blocked by: <change-name>`
+- Next step (plan? tasks? ready to archive?)
+
+## Step 3: Detect conflicts
 
 Scan all delta specs in active changes for overlapping modifications:
 
@@ -39,7 +42,7 @@ Scan all delta specs in active changes for overlapping modifications:
   "Archive Change" modified by: archive-safety, breaking-change
 ```
 
-## Step 4: Show Progress
+## Step 4: Show progress
 
 For each change, read `specs/.delta/<name>/tasks.md`:
 
@@ -50,22 +53,13 @@ For each change, read `specs/.delta/<name>/tasks.md`:
 
 If `tasks.md` doesn't exist, show "No tasks (run /ds:tasks)"
 
-## Step 5: Show Dependency Graph
+## Step 5: Show dependency graph
 
 Parse dependencies from all active changes and render ASCII tree.
 
 ### Step 5.1: Detect Cycles
 
-Before rendering the graph, check for circular dependencies:
-
-1. Build dependency graph from all active changes
-2. Use DFS with path tracking to detect cycles
-3. If cycle found, display warning before the graph:
-
-```
-⚠️  Cycle detected: auth → permissions → admin → auth
-    Run /ds:new or /ds:batch to resolve.
-```
+See [cycle-detection.md](../_shared/cycle-detection.md) for the cycle detection algorithm. Follow the **Warn-only** flow.
 
 ### Step 5.2: Render Graph
 

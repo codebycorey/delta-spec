@@ -18,11 +18,7 @@ See [version-check.md](../_shared/version-check.md) for the standard version com
 
 ## Step 1: Determine which change
 
-- If `name` provided → use it
-- If inferable from conversation → use it
-- If only one change in `specs/.delta/` → use it
-- If multiple and not inferable → ask user
-- If none → nothing to archive
+See [determine-change.md](../_shared/determine-change.md) for the standard change resolution procedure. If none → nothing to archive.
 
 ## Step 2: Check dependencies
 
@@ -32,27 +28,13 @@ See [version-check.md](../_shared/version-check.md) for the standard version com
   - Ask to proceed anyway or archive dependency first
 - Archiving out of order may result in specs that reference requirements that don't exist yet
 
-### Step 2.1: Check for cycles
+## Step 3: Check for cycles
 
-Check if this change is part of a circular dependency:
+Check if this change is part of a circular dependency.
 
-1. Build dependency graph from all active changes
-2. Detect if this change is in a cycle
+See [cycle-detection.md](../_shared/cycle-detection.md) for the cycle detection algorithm. Follow the **Warn with override** flow (archiving may break the cycle).
 
-If cycle detected:
-
-```
-⚠️  Cycle detected: this-change → other-a → other-b → this-change
-    Run /ds:new or /ds:batch to resolve the cycle.
-
-Proceed anyway? [y/N]
-```
-
-- Allow override since archiving this change might break the cycle
-- On "y": proceed with archiving (user takes responsibility)
-- On "n" or empty: stop and let user resolve the cycle first
-
-## Step 2.5: Pre-validate References
+## Step 4: Pre-validate references
 
 Before showing any diffs, validate all delta operations:
 
@@ -65,7 +47,7 @@ Before showing any diffs, validate all delta operations:
    - If found, error: "Cannot add 'X': requirement already exists in specs/Y.md"
 4. If any validation fails, stop immediately - **no files are modified**
 
-## Step 2.6: Check for Conflicts
+## Step 5: Check for conflicts
 
 Before proceeding with merge:
 
@@ -76,7 +58,7 @@ Before proceeding with merge:
    - Ask: "Proceed anyway or resolve conflict first?"
 4. Uses same conflict detection logic as `/ds:status`
 
-## Step 3: Merge delta specs with confirmation
+## Step 6: Merge delta specs with confirmation
 
 For each delta spec in `specs/.delta/<name>/specs/`:
 - Read the corresponding main spec in `specs/` (or create if new)
@@ -89,7 +71,7 @@ After showing all diffs, require explicit confirmation:
 3. **Default to No** - empty input or "n" cancels
 4. Only proceed on explicit "y" or "yes"
 
-## Step 4: Archive
+## Step 7: Archive
 
 - Move entire folder to `specs/.delta/archive/YYYY-MM-DD-<name>/`
 - Summarize what was merged

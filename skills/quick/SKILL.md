@@ -1,5 +1,5 @@
 ---
-description: Quick start a change with minimal interaction. Creates proposal, design, and tasks with one confirmation.
+description: Quick start a change with minimal interaction. Use when fast-tracking a straightforward change that needs proposal, design, and tasks in one step.
 argument-hint: '[name] ["description"]'
 ---
 
@@ -106,7 +106,7 @@ Ready to implement. Run `/ds:archive` when complete.
 
 ## Behavior Notes
 
-- This skill is for straightforward changes where you know what you want
+- Designed for straightforward changes with well-understood scope
 - For complex changes requiring discussion, use `/ds:new` → `/ds:plan` → `/ds:tasks`
-- The proposal confirmation is the single gate—make sure it captures your intent
+- The proposal confirmation is the single gate — it must capture the intended scope
 - Archive still requires separate confirmation (`/ds:archive`)

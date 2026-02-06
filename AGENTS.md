@@ -55,7 +55,11 @@ delta-spec/
 │   └── marketplace.json       # Marketplace listing config
 ├── skills/
 │   ├── _shared/
-│   │   └── version-check.md   # Shared version check procedure
+│   │   ├── version-check.md    # Shared version check procedure
+│   │   ├── cycle-detection.md  # Shared cycle detection algorithm
+│   │   ├── spec-format.md      # Shared base spec format + guidelines
+│   │   ├── delta-format.md     # Shared delta spec format
+│   │   └── determine-change.md # Shared change resolution procedure
 │   ├── init/SKILL.md           # /ds:init
 │   ├── new/SKILL.md            # /ds:new <name>
 │   ├── plan/SKILL.md           # /ds:plan [name]
@@ -65,7 +69,12 @@ delta-spec/
 │   ├── spec/SKILL.md           # /ds:spec [domain|search]
 │   ├── status/SKILL.md         # /ds:status
 │   ├── quick/SKILL.md          # /ds:quick [name]
-│   └── batch/SKILL.md          # /ds:batch
+│   └── batch/
+│       ├── SKILL.md            # /ds:batch
+│       ├── references/
+│       │   └── consolidation.md # Consolidation algorithm detail
+│       └── examples/
+│           └── batch-session.md # Example batch sessions
 ├── specs/
 │   ├── .delta-spec.json        # Version tracking (0.1.0)
 │   ├── skills.md               # Skill requirements (main spec)

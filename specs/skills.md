@@ -19,6 +19,7 @@ The system SHALL provide a `/ds:init` skill that creates the specs directory str
 - GIVEN an initialized repository with existing code
 - WHEN the user chooses to generate specs during init
 - THEN the system explores the codebase and creates domain-based spec files
+- AND uses the format defined in `_shared/spec-format.md`
 
 #### Scenario: Idempotent initialization
 - GIVEN a repository already initialized with delta-spec
@@ -29,6 +30,12 @@ The system SHALL provide a `/ds:init` skill that creates the specs directory str
 - GIVEN ds-init can overwrite existing files
 - WHEN the skill SKILL.md is defined
 - THEN the frontmatter includes `disable-model-invocation: true`
+
+#### Scenario: Non-duplicate opening line in init
+- GIVEN the init skill opening line duplicates the description verbatim
+- WHEN the skill SKILL.md is defined
+- THEN the opening line adds value beyond the description
+- AND does not repeat the description text
 
 ### Requirement: Start New Change
 The system SHALL provide a `/ds:new <name>` skill that creates a proposal for a new change, with cycle detection and resolution, with argument hints and placeholder usage.
@@ -47,29 +54,30 @@ The system SHALL provide a `/ds:new <name>` skill that creates a proposal for a 
 #### Scenario: Cycle detection on dependency declaration
 - GIVEN the user declares dependencies that create a cycle with existing changes
 - WHEN validating the dependency graph
-- THEN the system detects the cycle before finalizing the proposal
+- THEN the system detects the cycle using the shared cycle detection procedure
+- AND follows the full resolution flow from `_shared/cycle-detection.md`
 
 #### Scenario: Cycle resolution in new
 - GIVEN a cycle is detected during `/ds:new`
 - WHEN prompting the user
-- THEN the system shows the cycle and suggests extraction
-- AND lists existing proposals that have artifacts to remove
-- AND asks "Extract '<name>' as base change? [y/N]"
+- THEN the system follows the full resolution flow from `_shared/cycle-detection.md`
+- AND shows the cycle, suggests extraction, and lists affected artifacts
 
 #### Scenario: Cycle resolution accepted in new
 - GIVEN the user confirms cycle resolution with "y"
 - WHEN resolving the cycle
-- THEN the system creates the base proposal
-- AND updates the new proposal's dependencies
-- AND updates existing proposals' dependencies
-- AND removes design.md and tasks.md from affected existing proposals
-- AND runs `/ds:plan` for all affected changes in dependency order
+- THEN the system follows the confirm behavior from `_shared/cycle-detection.md`
 
 #### Scenario: Cycle resolution declined in new
 - GIVEN the user declines cycle resolution
 - WHEN resolution is declined
-- THEN the system asks user to remove a dependency from their proposal
-- AND proceeds only after cycle is broken
+- THEN the system follows the decline behavior from `_shared/cycle-detection.md`
+
+#### Scenario: Shared cycle detection reference in new
+- GIVEN the new skill needs cycle detection
+- WHEN the skill SKILL.md is defined
+- THEN the skill references `_shared/cycle-detection.md` instead of inlining the algorithm
+- AND includes a brief context note about when cycle detection runs (after Dependencies section)
 
 #### Scenario: Argument hint for name parameter
 - GIVEN ds-new requires a name argument
@@ -81,6 +89,18 @@ The system SHALL provide a `/ds:new <name>` skill that creates a proposal for a 
 - WHEN the skill SKILL.md is defined
 - THEN the skill body documents using `$ARGUMENTS` to reference the name
 
+#### Scenario: Description with trigger phrases
+- GIVEN ds-new is model-invocable
+- WHEN the skill SKILL.md is defined
+- THEN the description includes what the skill does and trigger context
+- AND mentions triggers like "start a change", "create a proposal", "plan a feature"
+
+#### Scenario: Consistent step headings in new
+- GIVEN the new skill uses mixed heading styles
+- WHEN the skill SKILL.md is defined
+- THEN all major steps use `## Step N: <title>` heading format
+- AND numbered list items are converted to step headings
+
 ### Requirement: Plan Change
 The system SHALL provide a `/ds:plan [name]` skill that creates design documents and delta specs with argument hints and placeholder usage.
 
@@ -90,6 +110,7 @@ The system SHALL provide a `/ds:plan [name]` skill that creates design documents
 - THEN the system explores the codebase for context
 - AND creates `design.md` with technical approach
 - AND generates delta specs in `specs/.delta/<name>/specs/`
+- AND uses the format defined in `_shared/delta-format.md`
 
 #### Scenario: Dependency warning
 - GIVEN a change that depends on another unarchived change
@@ -106,6 +127,22 @@ The system SHALL provide a `/ds:plan [name]` skill that creates design documents
 - GIVEN ds-plan accepts a name argument
 - WHEN the skill SKILL.md is defined
 - THEN the skill body documents using `$ARGUMENTS` to reference the name
+
+#### Scenario: Shared delta format reference
+- GIVEN ds-plan creates delta specs
+- WHEN the skill SKILL.md is defined
+- THEN the skill references `_shared/delta-format.md` instead of inlining the delta format
+
+#### Scenario: Shared change resolution reference
+- GIVEN ds-plan determines which change to operate on
+- WHEN the skill SKILL.md is defined
+- THEN the skill references `_shared/determine-change.md` instead of inlining the logic
+
+#### Scenario: Description with trigger phrases
+- GIVEN ds-plan is model-invocable
+- WHEN the skill SKILL.md is defined
+- THEN the description includes what the skill does and trigger context
+- AND mentions triggers like "plan this change", "create a design", "explore implementation"
 
 ### Requirement: Generate Tasks
 The system SHALL provide a `/ds:tasks [name]` skill that creates a `tasks.md` file, supporting both single-change and multi-change modes, with cycle detection, with argument hints and placeholder usage.
@@ -176,6 +213,18 @@ The system SHALL provide a `/ds:tasks [name]` skill that creates a `tasks.md` fi
 - WHEN the skill SKILL.md is defined
 - THEN the skill body documents using `$ARGUMENTS` to reference the name
 
+#### Scenario: Shared change resolution reference
+- GIVEN ds-tasks determines which change to operate on
+- WHEN the skill SKILL.md is defined
+- THEN the skill references `_shared/determine-change.md` for argument handling
+- AND documents multi-change mode variant inline
+
+#### Scenario: Description with trigger phrases
+- GIVEN ds-tasks is model-invocable
+- WHEN the skill SKILL.md is defined
+- THEN the description includes what the skill does and trigger context
+- AND mentions triggers like "create tasks", "generate implementation steps", "what needs to be done"
+
 ### Requirement: Archive Change
 The system SHALL provide a `/ds:archive [name]` skill that safely merges delta specs and archives the change, with cycle detection, with protection against auto-invocation, argument hints, and placeholder usage.
 
@@ -213,10 +262,15 @@ The system SHALL provide a `/ds:archive [name]` skill that safely merges delta s
 #### Scenario: Cycle detection in archive
 - GIVEN active changes with circular dependencies including this change
 - WHEN the user runs `/ds:archive`
-- THEN the system warns about the cycle
-- AND shows the cycle path
-- AND suggests running `/ds:new` or `/ds:batch` to resolve
-- AND asks whether to proceed anyway
+- THEN the system detects the cycle using the shared cycle detection procedure
+- AND follows the warn-only flow from `_shared/cycle-detection.md`
+- AND offers the archive-specific override option
+
+#### Scenario: Shared cycle detection reference in archive
+- GIVEN the archive skill needs cycle detection
+- WHEN the skill SKILL.md is defined
+- THEN the skill references `_shared/cycle-detection.md` instead of inlining the algorithm
+- AND includes a brief context note about archive-specific override behavior
 
 #### Scenario: Interactive confirmation
 - GIVEN diffs have been shown
@@ -244,6 +298,17 @@ The system SHALL provide a `/ds:archive [name]` skill that safely merges delta s
 - GIVEN ds-archive accepts a name argument
 - WHEN the skill SKILL.md is defined
 - THEN the skill body documents using `$ARGUMENTS` to reference the name
+
+#### Scenario: Shared change resolution reference
+- GIVEN ds-archive determines which change to operate on
+- WHEN the skill SKILL.md is defined
+- THEN the skill references `_shared/determine-change.md` instead of inlining the logic
+
+#### Scenario: Sequential step numbering in archive
+- GIVEN the archive skill uses non-sequential step numbers (2.1, 2.5, 2.6)
+- WHEN the skill SKILL.md is defined
+- THEN all steps are numbered sequentially (1, 2, 3, 4, 5, 6, 7)
+- AND no sub-step numbering like 2.1 or 2.5 is used at the top level
 
 ### Requirement: Drop Change
 The system SHALL provide a `/ds:drop [name]` skill that abandons a change with protection against auto-invocation, argument hints, and placeholder usage.
@@ -274,6 +339,12 @@ The system SHALL provide a `/ds:drop [name]` skill that abandons a change with p
 - GIVEN ds-drop accepts a name argument
 - WHEN the skill SKILL.md is defined
 - THEN the skill body documents using `$ARGUMENTS` to reference the name
+
+#### Scenario: Shared change resolution reference
+- GIVEN ds-drop determines which change to operate on
+- WHEN the skill SKILL.md is defined
+- THEN the skill references `_shared/determine-change.md` instead of inlining the logic
+- AND notes that confirmation is required even with a single change
 
 ### Requirement: Show Status
 The system SHALL provide a `/ds:status` skill that shows all active changes with conflicts, progress from task files, dependency visualization, and cycle warnings, with tool restrictions for read-only access.
@@ -322,13 +393,31 @@ The system SHALL provide a `/ds:status` skill that shows all active changes with
 #### Scenario: Cycle detection in status
 - GIVEN active changes with circular dependencies
 - WHEN the user runs `/ds:status`
-- THEN the system displays a cycle warning showing the cycle path
-- AND suggests running `/ds:new` or `/ds:batch` to resolve
+- THEN the system detects the cycle using the shared cycle detection procedure
+- AND follows the warn-only flow from `_shared/cycle-detection.md`
+
+#### Scenario: Shared cycle detection reference in status
+- GIVEN the status skill needs cycle detection
+- WHEN the skill SKILL.md is defined
+- THEN the skill references `_shared/cycle-detection.md` instead of inlining the algorithm
+- AND includes a brief context note about display-only behavior
 
 #### Scenario: Read-only tool restrictions
 - GIVEN ds-status only reads change state
 - WHEN the skill SKILL.md is defined
 - THEN the frontmatter includes `allowed-tools: ["Read", "Glob"]`
+
+#### Scenario: Description with trigger phrases
+- GIVEN ds-status is model-invocable
+- WHEN the skill SKILL.md is defined
+- THEN the description includes what the skill does and trigger context
+- AND mentions triggers like "what's the status", "show active changes", "what are we working on"
+
+#### Scenario: Consistent step headings in status
+- GIVEN the status skill uses mixed heading styles
+- WHEN the skill SKILL.md is defined
+- THEN all major steps use `## Step N: <title>` heading format
+- AND numbered list items under `## Steps` are converted to step headings or content under step headings
 
 ### Requirement: View Specifications
 The system SHALL provide a `/ds:spec [domain|search]` skill to view, discuss, or search specs, with tool restrictions for read-only access, argument hints, and placeholder usage.
@@ -373,6 +462,17 @@ The system SHALL provide a `/ds:spec [domain|search]` skill to view, discuss, or
 - GIVEN ds-spec accepts a domain or search argument
 - WHEN the skill SKILL.md is defined
 - THEN the skill body documents using `$ARGUMENTS` to reference the argument
+
+#### Scenario: Shared spec format reference
+- GIVEN ds-spec displays format information to users
+- WHEN the skill SKILL.md is defined
+- THEN the skill references `_shared/spec-format.md` instead of inlining the format
+
+#### Scenario: Description with trigger phrases
+- GIVEN ds-spec is model-invocable
+- WHEN the skill SKILL.md is defined
+- THEN the description includes what the skill does and trigger context
+- AND mentions triggers like "show specs", "search specs", "what does the spec say"
 
 ### Requirement: Change Inference
 The system SHALL infer the current change when name is omitted from skills.
@@ -440,6 +540,18 @@ The system SHALL provide a `/ds:quick [name] ["description"]` skill that creates
 - WHEN the skill SKILL.md is defined
 - THEN the skill body documents using `$ARGUMENTS` to reference the arguments
 
+#### Scenario: Description with trigger phrases
+- GIVEN ds-quick is model-invocable
+- WHEN the skill SKILL.md is defined
+- THEN the description includes what the skill does and trigger context
+- AND mentions triggers like "quick start", "fast-track this change", "set it all up"
+
+#### Scenario: Imperative writing style in quick
+- GIVEN the quick skill uses second-person writing ("you know what you want", "make sure it captures your intent")
+- WHEN the skill SKILL.md is defined
+- THEN all content uses imperative or third-person form
+- AND no second-person pronouns ("you", "your") appear in the skill body
+
 ### Requirement: Batch Feature Planning
 The system SHALL provide a `/ds:batch` skill that creates multiple proposals from a single free-form description, with feature consolidation, dependency inference, and cycle detection and resolution.
 
@@ -484,37 +596,36 @@ The system SHALL provide a `/ds:batch` skill that creates multiple proposals fro
 - THEN the system asks for clarification before proceeding
 
 #### Scenario: Cycle detection
-- GIVEN inferred dependencies form a cycle (A → B → C → A)
+- GIVEN inferred dependencies form a cycle (A -> B -> C -> A)
 - WHEN validating the dependency graph
-- THEN the system detects the cycle before showing confirmation
+- THEN the system detects the cycle using the shared cycle detection procedure
+- AND follows the full resolution flow from `_shared/cycle-detection.md`
 
 #### Scenario: Cycle analysis
 - GIVEN a cycle is detected
 - WHEN analyzing the cycle
-- THEN the system examines descriptions of all changes in the cycle
-- AND identifies common concepts (terms appearing in multiple descriptions)
-- AND suggests a base change name from the common concept
+- THEN the system follows the analysis procedure from `_shared/cycle-detection.md`
 
 #### Scenario: Cycle resolution offer
 - GIVEN a cycle is detected with a suggested extraction
 - WHEN prompting the user
-- THEN the system shows the cycle and suggested extraction
-- AND lists any artifacts (design.md, tasks.md) that will be removed
-- AND asks "Extract '<name>' as base change? [y/N]"
+- THEN the system follows the full resolution flow from `_shared/cycle-detection.md`
 
 #### Scenario: Cycle resolution accepted
 - GIVEN the user confirms cycle resolution with "y"
 - WHEN resolving the cycle
-- THEN the system creates a new proposal for the base change
-- AND updates dependencies in affected proposals to point to the base
-- AND removes design.md and tasks.md from affected proposals
-- AND runs `/ds:plan` for all affected changes in dependency order
+- THEN the system follows the confirm behavior from `_shared/cycle-detection.md`
 
 #### Scenario: Cycle resolution declined
 - GIVEN the user declines cycle resolution with "n" or empty input
 - WHEN resolution is declined
-- THEN the system asks user to manually specify which dependency to remove
-- AND proceeds only after cycle is broken
+- THEN the system follows the decline behavior from `_shared/cycle-detection.md`
+
+#### Scenario: Shared cycle detection reference in batch
+- GIVEN the batch skill needs cycle detection
+- WHEN the skill SKILL.md is defined
+- THEN the skill references `_shared/cycle-detection.md` instead of inlining the algorithm
+- AND includes a brief context note about consolidation happening before cycle detection
 
 #### Scenario: Show dependency graph
 - GIVEN parsed features with dependencies (no cycle)
@@ -580,14 +691,40 @@ The system SHALL provide a `/ds:batch` skill that creates multiple proposals fro
 - THEN the system suggests using `/ds:new` or `/ds:quick` instead
 - AND offers to proceed anyway if the user wants
 
+#### Scenario: Example sessions as reference
+- GIVEN the batch skill includes example sessions
+- WHEN the skill SKILL.md is defined
+- THEN example sessions are stored in `examples/batch-session.md`
+- AND the main SKILL.md references the examples file
+- AND examples include both basic workflow and consolidation detected scenarios
+
+#### Scenario: Skill word count within guidelines
+- GIVEN the batch SKILL.md was ~2,500 words
+- WHEN consolidation detail and examples are extracted
+- THEN the main SKILL.md is ~1,300 words
+- AND well within the 3,000-word guideline
+
+#### Scenario: Description with trigger phrases
+- GIVEN ds-batch is model-invocable
+- WHEN the skill SKILL.md is defined
+- THEN the description includes what the skill does and trigger context
+- AND mentions triggers like "plan multiple features", "batch create proposals", "several features to plan"
+
 ### Requirement: Consolidate overlapping features in batch
 The system SHALL detect and suggest consolidation of overlapping features during `/ds:batch` before dependency inference.
+
+#### Scenario: Progressive disclosure for consolidation
+- GIVEN the consolidation algorithm is detailed (~130 lines)
+- WHEN the batch skill SKILL.md is defined
+- THEN the main SKILL.md contains a brief summary of Step 2.5 (3-4 lines)
+- AND references `references/consolidation.md` for the full algorithm
+- AND the reference file contains the complete overlap detection, grouping, prompting, merging, and edge case logic
 
 #### Scenario: Detect file overlap
 - GIVEN multiple parsed features mention the same file path
 - WHEN analyzing for overlap signals
 - THEN the system identifies this as a strong signal for consolidation
-- AND suggests grouping those features
+- AND follows the full procedure in `references/consolidation.md`
 
 #### Scenario: Detect keyword overlap
 - GIVEN two features share 3 or more domain-specific terms
@@ -610,8 +747,7 @@ The system SHALL detect and suggest consolidation of overlapping features during
 #### Scenario: Conservative grouping threshold
 - GIVEN overlap signals are detected between features
 - WHEN deciding whether to suggest consolidation
-- THEN the system requires 2+ strong signals OR 1 strong + 2 medium signals
-- AND does not suggest consolidation with only weak signals
+- THEN the system follows the threshold rules in `references/consolidation.md`
 
 #### Scenario: Display consolidation suggestions
 - GIVEN overlapping features are detected
@@ -804,3 +940,127 @@ The system SHALL extract version check logic to a shared file to eliminate dupli
 - WHEN the skill SKILL.md is defined
 - THEN the skill does not include a version check step
 - AND the skill does not reference the shared version check file
+
+### Requirement: Shared Cycle Detection
+The system SHALL extract cycle detection logic to a shared file to eliminate duplication across skills.
+
+#### Scenario: Create shared cycle detection file
+- GIVEN cycle detection logic is duplicated across multiple skills
+- WHEN organizing skill structure
+- THEN a `skills/_shared/cycle-detection.md` file contains the canonical procedure
+- AND the procedure includes DFS algorithm, description analysis, and resolution prompts
+
+#### Scenario: Core algorithm section
+- GIVEN the shared cycle detection file
+- WHEN defining the core algorithm
+- THEN the file documents DFS with path tracking
+- AND returns the cycle path when a cycle is found
+
+#### Scenario: Analysis and extraction section
+- GIVEN the shared cycle detection file
+- WHEN defining the analysis procedure
+- THEN the file documents description tokenization and common concept extraction
+- AND documents base change name suggestion from common terms
+
+#### Scenario: Full resolution flow section
+- GIVEN the shared cycle detection file
+- WHEN defining the full resolution flow (used by new, batch)
+- THEN the file documents the extraction prompt format
+- AND documents confirm behavior (create base, update deps, clean artifacts)
+- AND documents decline behavior (ask user which dep to remove)
+
+#### Scenario: Warn-only resolution section
+- GIVEN the shared cycle detection file
+- WHEN defining the warn-only flow (used by archive, status)
+- THEN the file documents the warning display format
+- AND documents suggesting `/ds:new` or `/ds:batch` to resolve
+
+#### Scenario: Archive-specific override option
+- GIVEN the shared cycle detection file
+- WHEN defining archive-specific behavior
+- THEN the file documents the "proceed anyway?" option
+- AND notes that archiving may break the cycle
+
+### Requirement: Shared Spec Format
+The system SHALL extract spec format templates to shared files to eliminate duplication across skills.
+
+#### Scenario: Create shared base spec format file
+- GIVEN the base spec format template is duplicated across init and spec skills
+- WHEN organizing skill structure
+- THEN a `skills/_shared/spec-format.md` file contains the canonical base spec format
+- AND includes the template structure (Domain, Purpose, Requirements, Scenarios)
+- AND includes writing guidelines (RFC 2119 keywords, atomic requirements, Given/When/Then)
+
+#### Scenario: Create shared delta format file
+- GIVEN the delta spec format template exists only in the plan skill but is conceptually shared
+- WHEN organizing skill structure
+- THEN a `skills/_shared/delta-format.md` file contains the canonical delta format
+- AND includes ADDED, MODIFIED, REMOVED, and RENAMED sections
+
+#### Scenario: Include spec format in init
+- GIVEN the init skill generates specs during initialization
+- WHEN the skill SKILL.md is defined
+- THEN the skill references `_shared/spec-format.md` for the format template
+- AND does not duplicate the format inline
+
+#### Scenario: Include spec format in spec
+- GIVEN the spec skill displays format reference to users
+- WHEN the skill SKILL.md is defined
+- THEN the skill references `_shared/spec-format.md` for the format and guidelines
+- AND does not duplicate the format or guidelines inline
+
+#### Scenario: Include delta format in plan
+- GIVEN the plan skill creates delta specs
+- WHEN the skill SKILL.md is defined
+- THEN the skill references `_shared/delta-format.md` for the delta format template
+- AND does not duplicate the format inline
+
+### Requirement: Shared Change Resolution
+The system SHALL extract the "determine which change" logic to a shared file to eliminate duplication across skills.
+
+#### Scenario: Create shared change resolution file
+- GIVEN change resolution logic is duplicated across multiple skills
+- WHEN organizing skill structure
+- THEN a `skills/_shared/determine-change.md` file contains the standard procedure
+- AND the procedure covers: argument provided, conversation inference, single change, multiple changes, no changes
+
+#### Scenario: Standard resolution flow
+- GIVEN the shared change resolution file
+- WHEN defining the standard flow
+- THEN step 1 checks if name is provided in arguments
+- AND step 2 checks if inferable from conversation context
+- AND step 3 uses the single active change if only one exists
+- AND step 4 asks user to pick if multiple changes exist
+- AND step 5 suggests a prerequisite if no changes exist
+
+#### Scenario: Parameterized behavior
+- GIVEN skills have slightly different resolution behavior
+- WHEN defining the shared procedure
+- THEN the file documents context-specific variations as notes
+- AND includes: prerequisite suggestion varies by skill
+- AND includes: drop confirms even with single change
+- AND includes: tasks uses multi-change mode instead of asking
+
+#### Scenario: Include in plan
+- GIVEN the plan skill determines which change to operate on
+- WHEN the skill SKILL.md is defined
+- THEN the skill references `_shared/determine-change.md`
+- AND notes prerequisite is `/ds:new`
+
+#### Scenario: Include in archive
+- GIVEN the archive skill determines which change to operate on
+- WHEN the skill SKILL.md is defined
+- THEN the skill references `_shared/determine-change.md`
+- AND notes "nothing to archive" when no changes exist
+
+#### Scenario: Include in drop
+- GIVEN the drop skill determines which change to operate on
+- WHEN the skill SKILL.md is defined
+- THEN the skill references `_shared/determine-change.md`
+- AND notes confirmation is required even for single change
+
+#### Scenario: Include in tasks with variant
+- GIVEN the tasks skill has a multi-change mode
+- WHEN the skill SKILL.md is defined
+- THEN the skill references `_shared/determine-change.md` for argument handling
+- AND documents the multi-change variant inline (processing all planned changes)

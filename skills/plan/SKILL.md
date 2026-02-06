@@ -1,5 +1,5 @@
 ---
-description: Create design and delta specs. Explores codebase for implementation approach that fits existing patterns.
+description: Create design and delta specs from a proposal. Use when planning implementation, exploring codebase for approach, or creating a design.
 argument-hint: "[name]"
 ---
 
@@ -15,11 +15,7 @@ See [version-check.md](../_shared/version-check.md) for the standard version com
 
 ## Step 1: Determine which change
 
-- If `name` provided → use `specs/.delta/<name>/`
-- If inferable from conversation (e.g., user just ran `/ds:new add-oauth`) → use it
-- If only one change in `specs/.delta/` → use it
-- If multiple and not inferable → use AskUserQuestion to let user pick
-- If none → tell user to run `/ds:new` first
+See [determine-change.md](../_shared/determine-change.md) for the standard change resolution procedure. Prerequisite: suggest `/ds:new`.
 
 ## Step 2: Build context
 
@@ -88,35 +84,4 @@ During exploration, if you discover:
 
 ## Delta Format
 
-```markdown
-# Delta: <Domain>
-
-Changes for <change-name>.
-
-## ADDED Requirements
-
-### Requirement: <New Requirement>
-The system SHALL <new behavior>.
-
-#### Scenario: <Name>
-- GIVEN <precondition>
-- WHEN <action>
-- THEN <outcome>
-
-## MODIFIED Requirements
-
-### Requirement: <Existing Requirement>
-The system SHALL <updated behavior>.
-(Completely replaces the requirement with this name)
-
-## REMOVED Requirements
-
-### Requirement: <Requirement To Remove>
-**Reason:** [Why this is being removed]
-**Migration:** [What replaces it, if anything]
-
-## RENAMED Requirements
-
-- FROM: `Old Name`
-- TO: `New Name`
-```
+See [delta-format.md](../_shared/delta-format.md) for the delta spec format.

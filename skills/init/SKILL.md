@@ -5,7 +5,7 @@ disable-model-invocation: true
 
 # /ds:init - Initialize delta-spec
 
-Initialize delta-spec in a repository.
+Set up the specs directory structure and optionally generate initial specifications from existing codebase code.
 
 **Note:** This skill performs destructive operations (creating directory structure, potentially overwriting `.delta-spec.json`) and requires explicit user invocation.
 
@@ -80,21 +80,4 @@ For each domain discovered:
 
 ## Spec Format
 
-Generated specs use this format:
-
-```markdown
-# <Domain> Specification
-
-## Purpose
-Brief description of what this domain covers.
-
-## Requirements
-
-### Requirement: <Name>
-The system [SHALL|MUST|SHOULD|MAY] <behavior description>.
-
-#### Scenario: <Scenario Name>
-- GIVEN <precondition>
-- WHEN <action>
-- THEN <expected outcome>
-```
+See [spec-format.md](../_shared/spec-format.md) for the standard spec format and writing guidelines.

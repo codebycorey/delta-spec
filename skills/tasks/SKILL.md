@@ -1,5 +1,5 @@
 ---
-description: Generate implementation tasks from design and delta specs. Creates tasks.md file.
+description: Generate implementation tasks from design and delta specs. Use when creating a task list, breaking down work, or preparing to implement.
 argument-hint: "[name]"
 ---
 
@@ -15,10 +15,7 @@ See [version-check.md](../_shared/version-check.md) for the standard version com
 
 ## Step 1: Determine which change(s)
 
-- If `name` provided → use `specs/.delta/<name>/` (single change mode)
-- If only one planned change (has design+specs) → use it
-- If multiple planned changes and no name → **process all in dependency order** (multi-change mode)
-- If none planned → tell user to run `/ds:plan` first
+See [determine-change.md](../_shared/determine-change.md) for the standard change resolution procedure. For tasks, uses multi-change mode: if no name provided and multiple planned changes exist, process all in dependency order. Prerequisite: suggest `/ds:plan`.
 
 ### Multi-Change Mode
 

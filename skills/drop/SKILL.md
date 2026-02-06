@@ -18,11 +18,7 @@ See [version-check.md](../_shared/version-check.md) for the standard version com
 
 ## Step 1: Determine which change
 
-- If `name` provided → use it
-- If inferable from conversation → use it
-- If only one change in `specs/.delta/` → confirm with user before dropping
-- If multiple and not inferable → ask user which to drop
-- If none → nothing to drop
+See [determine-change.md](../_shared/determine-change.md) for the standard change resolution procedure. For drop: confirm with user even when only one change exists (destructive operation). If none → nothing to drop.
 
 ## Step 2: Check for dependents
 

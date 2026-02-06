@@ -1,3 +1,5 @@
+# Version Check
+
 Check `specs/.delta-spec.json` for version compatibility:
 - If file missing → tell user to run `/ds:init` first
 - If version matches current plugin version → proceed

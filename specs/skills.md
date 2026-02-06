@@ -37,6 +37,12 @@ The system SHALL provide a `/ds:init` skill that creates the specs directory str
 - THEN the opening line adds value beyond the description
 - AND does not repeat the description text
 
+#### Scenario: Skill content describes intent not tools
+- GIVEN the init skill asks the user a question
+- WHEN the skill SKILL.md is defined
+- THEN the skill uses intent-based language ("Ask the user")
+- AND does not reference specific tool names like `AskUserQuestion`
+
 ### Requirement: Start New Change
 The system SHALL provide a `/ds:new <name>` skill that creates a proposal for a new change, with cycle detection and resolution, with argument hints and placeholder usage.
 
@@ -100,6 +106,11 @@ The system SHALL provide a `/ds:new <name>` skill that creates a proposal for a 
 - WHEN the skill SKILL.md is defined
 - THEN all major steps use `## Step N: <title>` heading format
 - AND numbered list items are converted to step headings
+
+#### Scenario: No redundant behavior section
+- GIVEN the new skill documents behavior in its steps
+- WHEN the skill SKILL.md is defined
+- THEN there is no separate "Behavior" section that duplicates step content
 
 ### Requirement: Plan Change
 The system SHALL provide a `/ds:plan [name]` skill that creates design documents and delta specs with argument hints and placeholder usage.
@@ -309,6 +320,12 @@ The system SHALL provide a `/ds:archive [name]` skill that safely merges delta s
 - WHEN the skill SKILL.md is defined
 - THEN all steps are numbered sequentially (1, 2, 3, 4, 5, 6, 7)
 - AND no sub-step numbering like 2.1 or 2.5 is used at the top level
+
+#### Scenario: No redundant merge documentation
+- GIVEN the archive skill documents the merge algorithm
+- WHEN the skill SKILL.md is defined
+- THEN the merge rules (operation order, validation) are documented once
+- AND there is no separate "Delta Rules" section duplicating the merge algorithm
 
 ### Requirement: Drop Change
 The system SHALL provide a `/ds:drop [name]` skill that abandons a change with protection against auto-invocation, argument hints, and placeholder usage.
@@ -552,6 +569,12 @@ The system SHALL provide a `/ds:quick [name] ["description"]` skill that creates
 - THEN all content uses imperative or third-person form
 - AND no second-person pronouns ("you", "your") appear in the skill body
 
+#### Scenario: Consolidated no-prompt instructions
+- GIVEN Steps 5 and 6 both run without interaction
+- WHEN the skill SKILL.md is defined
+- THEN a single note covers both steps ("Steps 5-6 run without prompts")
+- AND the note is not duplicated in each step
+
 ### Requirement: Batch Feature Planning
 The system SHALL provide a `/ds:batch` skill that creates multiple proposals from a single free-form description, with feature consolidation, dependency inference, and cycle detection and resolution.
 
@@ -709,6 +732,11 @@ The system SHALL provide a `/ds:batch` skill that creates multiple proposals fro
 - WHEN the skill SKILL.md is defined
 - THEN the description includes what the skill does and trigger context
 - AND mentions triggers like "plan multiple features", "batch create proposals", "several features to plan"
+
+#### Scenario: Edge case cross-references steps
+- GIVEN the Circular Dependencies edge case describes behavior handled by Step 3.5
+- WHEN the skill SKILL.md is defined
+- THEN the edge case uses a cross-reference to Step 3.5 rather than re-summarizing the behavior
 
 ### Requirement: Consolidate overlapping features in batch
 The system SHALL detect and suggest consolidation of overlapping features during `/ds:batch` before dependency inference.
@@ -941,6 +969,11 @@ The system SHALL extract version check logic to a shared file to eliminate dupli
 - THEN the skill does not include a version check step
 - AND the skill does not reference the shared version check file
 
+#### Scenario: Consistent heading in shared file
+- GIVEN the shared version check file is referenced by multiple skills
+- WHEN organizing skill structure
+- THEN `skills/_shared/version-check.md` has a heading consistent with other shared files
+
 ### Requirement: Shared Cycle Detection
 The system SHALL extract cycle detection logic to a shared file to eliminate duplication across skills.
 
@@ -1064,3 +1097,8 @@ The system SHALL extract the "determine which change" logic to a shared file to 
 - WHEN the skill SKILL.md is defined
 - THEN the skill references `_shared/determine-change.md` for argument handling
 - AND documents the multi-change variant inline (processing all planned changes)
+
+#### Scenario: Quick skill noted in context
+- GIVEN the quick skill creates new changes rather than operating on existing ones
+- WHEN the shared determine-change file lists context-specific notes
+- THEN it includes a note that quick does not use this procedure

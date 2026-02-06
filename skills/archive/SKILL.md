@@ -82,15 +82,7 @@ After showing all diffs, require explicit confirmation:
 2. Parse delta into operations by section
 3. Apply in order:
    - RENAMED: Update requirement name
-   - REMOVED: Delete the block
-   - MODIFIED: Replace entire block
-   - ADDED: Append to end of Requirements section
+   - REMOVED: Delete the block (fails if name doesn't exist)
+   - MODIFIED: Replace entire block (fails if name doesn't exist)
+   - ADDED: Append to end of Requirements section (fails if name exists)
 4. Write updated main spec
-
-## Delta Rules
-
-- ADDED: New requirement - fails if name exists
-- MODIFIED: Full replacement - fails if name doesn't exist
-- REMOVED: Delete - fails if name doesn't exist
-- RENAMED: Change name only, apply MODIFIED separately if needed
-- Order: RENAMED → REMOVED → MODIFIED → ADDED

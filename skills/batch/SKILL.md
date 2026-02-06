@@ -239,11 +239,7 @@ If Step 2 parsing completes and no overlap signals are detected between features
 
 ### Circular Dependencies
 
-Handled in Step 3.5. The system will:
-- Detect the cycle and analyze descriptions for common concepts
-- Suggest extracting a base change to break the cycle
-- On confirm: create base proposal, update dependencies, clean artifacts, re-plan
-- On decline: ask user which dependency to remove manually
+Handled in Step 3.5. See [cycle-detection.md](../_shared/cycle-detection.md).
 
 ## Examples
 

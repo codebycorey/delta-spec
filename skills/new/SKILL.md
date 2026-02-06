@@ -61,10 +61,3 @@ Work with the user to flesh out the proposal interactively.
 After the proposal is complete (especially the Dependencies section), check if the declared dependencies create a cycle with existing changes.
 
 See [cycle-detection.md](../_shared/cycle-detection.md) for the cycle detection algorithm. Follow the **Full resolution** flow.
-
-## Behavior
-
-- If the change already exists, reopen the proposal for editing/refinement
-- Work interactively with the user to fill out each section
-- Ask clarifying questions to understand the problem fully
-- After Dependencies are defined, check for cycles before finalizing

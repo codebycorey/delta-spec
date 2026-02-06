@@ -70,7 +70,9 @@ Display the generated proposal to the user, then ask:
 - On "n", empty, or anything else → stop here
   - Tell user: "Proposal saved. You can refine it with `/ds:new <name>` or continue later with `/ds:plan`"
 
-## Step 5: Run planning (no prompts)
+**Note:** Steps 5-7 run without additional prompts.
+
+## Step 5: Run planning
 
 Execute the planning phase without interaction:
 
@@ -78,9 +80,7 @@ Execute the planning phase without interaction:
 2. **Create design.md** - Document context, approach, decisions, files affected
 3. **Create delta specs** - Generate `specs/.delta/<name>/specs/<domain>.md` files
 
-Do not ask for confirmation during this step.
-
-## Step 6: Run task generation (no prompts)
+## Step 6: Run task generation
 
 Execute task generation without interaction:
 
@@ -88,8 +88,6 @@ Execute task generation without interaction:
 2. **Identify implementation tasks**
 3. **Create tasks.md** with ordered, actionable tasks
 4. **Check for test infrastructure** - include test tasks if tests exist
-
-Do not ask for confirmation during this step.
 
 ## Step 7: Output summary
 

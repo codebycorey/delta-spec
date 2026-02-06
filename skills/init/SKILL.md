@@ -36,7 +36,7 @@ specs/                        # Source of truth
   ```
 
 **Step 2: Ask about existing code**
-Use AskUserQuestion to ask:
+Ask the user:
 > "Would you like me to explore the codebase and generate initial specs based on existing code?"
 >
 > Options:

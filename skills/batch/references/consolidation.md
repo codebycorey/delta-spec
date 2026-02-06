@@ -1,4 +1,4 @@
-## Step 2.5: Consolidate overlapping features (if detected)
+# Overlap Consolidation Algorithm
 
 Before inferring dependencies, analyze parsed features for potential overlaps. If multiple features appear to describe similar or related functionality, suggest consolidating them to avoid duplicate work during planning and implementation.
 

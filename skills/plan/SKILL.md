@@ -23,7 +23,7 @@ See [determine-change.md](../_shared/determine-change.md) for the standard chang
 - Read `design.md` if it exists (for refinement)
 - Read existing delta specs if any
 
-## Step 2b: Note dependencies (informational)
+## Step 3: Note dependencies (informational)
 
 - Parse Dependencies section from proposal
 - For each dependency, check if it exists in `archive/` (satisfied) or `specs/.delta/` (not satisfied)
@@ -32,14 +32,14 @@ See [determine-change.md](../_shared/determine-change.md) for the standard chang
   - **Proceed without asking** - planning is safe and doesn't require dependencies
 - Planning can always proceed; dependencies are enforced at `/ds:tasks` and `/ds:archive`
 
-## Step 3: Explore the codebase
+## Step 4: Explore the codebase
 
 - Find relevant existing code and patterns
 - Identify frameworks and conventions in use
 - Determine which files will likely need changes
 - Understand the current architecture
 
-## Step 4: Update proposal if needed
+## Step 5: Update proposal if needed
 
 During exploration, if you discover:
 - The scope needs adjustment
@@ -49,7 +49,7 @@ During exploration, if you discover:
 
 → Update `proposal.md` and note the changes to the user.
 
-## Step 5: Create/update design.md
+## Step 6: Create/update design.md
 
 ```markdown
 # Design: <name>
@@ -75,7 +75,7 @@ During exploration, if you discover:
 - [Known limitations or concerns]
 ```
 
-## Step 6: Create delta specs
+## Step 7: Create delta specs
 
 - Determine which spec domains are affected
 - Create delta specs in `specs/.delta/<name>/specs/<domain>.md`

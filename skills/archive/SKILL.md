@@ -1,5 +1,5 @@
 ---
-description: Complete a change by merging delta specs into main specs and archiving.
+description: Complete a change by merging delta specs into main specs and archiving. Use when implementation is done, all tasks are complete, or ready to finalize a change.
 argument-hint: "[name]"
 disable-model-invocation: true
 ---

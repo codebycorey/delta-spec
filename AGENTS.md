@@ -59,7 +59,8 @@ delta-spec/
 │   │   ├── cycle-detection.md  # Shared cycle detection algorithm
 │   │   ├── spec-format.md      # Shared base spec format + guidelines
 │   │   ├── delta-format.md     # Shared delta spec format
-│   │   └── determine-change.md # Shared change resolution procedure
+│   │   ├── determine-change.md # Shared change resolution procedure
+│   │   └── proposal-template.md # Shared proposal template
 │   ├── init/SKILL.md           # /ds:init
 │   ├── new/SKILL.md            # /ds:new <name>
 │   ├── plan/SKILL.md           # /ds:plan [name]

@@ -159,39 +159,9 @@ After showing the graph, ask for confirmation:
 
 On "y":
 1. Create `specs/.delta/<name>/` directory for each feature
-2. Create `proposal.md` using the standard template
+2. Create `proposal.md` using the standard template — see [proposal-template.md](../_shared/proposal-template.md)
 3. Fill in sections from the parsed description
 4. Create in dependency order (dependencies first)
-
-### Proposal Template
-
-```markdown
-# Proposal: <name>
-
-## Problem
-<Generated from the feature description - what problem does this solve?>
-
-## Dependencies
-<List of dependencies, or "None">
-- `<dep-name>` - <brief reason>
-
-## Changes
-- <Inferred changes based on description>
-
-## Capabilities
-
-### New
-- <Inferred new capabilities>
-
-### Modified
-- <If applicable, otherwise omit>
-
-## Out of Scope
-- <Reasonable boundaries based on description>
-
-## Success Criteria
-- <Derived from problem/changes>
-```
 
 On "n" or empty input:
 - Stop and tell user they can refine their description and try again

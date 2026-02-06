@@ -1,5 +1,5 @@
 ---
-description: Initialize delta-spec in a repository. Creates specs/ directory structure and optionally generates specs from existing code.
+description: Initialize delta-spec in a repository. Use when setting up delta-spec for the first time, creating specs/ directory structure, or generating specs from existing code.
 disable-model-invocation: true
 ---
 
@@ -27,10 +27,10 @@ specs/                        # Source of truth
 - Create `specs/` directory
 - Create `specs/.delta/` directory
 - Create `specs/.delta/archive/` directory
-- Create `specs/.delta-spec.json` with the current plugin version:
+- Create `specs/.delta-spec.json` with the current plugin version (read from `.claude-plugin/plugin.json`):
   ```json
   {
-    "version": "<current plugin version>",
+    "version": "<version from .claude-plugin/plugin.json>",
     "initialized": "YYYY-MM-DD"
   }
   ```

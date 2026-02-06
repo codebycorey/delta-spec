@@ -7,25 +7,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.0] - 2026-02-06
+
 ### Added
-- `/ds-quick` skill for streamlined proposal → plan → tasks workflow with single confirmation
-- `/ds-batch` skill for batch proposal creation from free-form feature descriptions
-- Search capability in `/ds-spec` - find requirements by keyword across all specs
-- Conflict detection in `/ds-status` - warns when multiple changes modify the same requirement
-- Progress tracking in `/ds-status` - shows completed vs pending tasks
-- Dependency visualization in `/ds-status` - ASCII tree showing change relationships
-- Circular dependency detection and resolution in `/ds-new` and `/ds-batch`
+- `/ds:quick` skill for streamlined proposal → plan → tasks workflow with single confirmation
+- `/ds:batch` skill for batch proposal creation from free-form feature descriptions
+- Search capability in `/ds:spec` - find requirements by keyword across all specs
+- Conflict detection in `/ds:status` - warns when multiple changes modify the same requirement
+- Progress tracking in `/ds:status` - shows completed vs pending tasks
+- Dependency visualization in `/ds:status` - ASCII tree showing change relationships
+- Circular dependency detection and resolution in `/ds:new` and `/ds:batch`
 - Pre-archive validation - checks requirement references exist before merging
-- Interactive confirmation step in `/ds-archive` after showing diff
+- Interactive confirmation step in `/ds:archive` after showing diff
 - Persistent task files (`tasks.md`) replacing native TaskCreate tool
-- Context-aware test task generation in `/ds-tasks`
-- Multiple changes support in `/ds-tasks` - process all planned changes in dependency order
+- Context-aware test task generation in `/ds:tasks`
+- Multiple changes support in `/ds:tasks` - process all planned changes in dependency order
+- Shared reference files in `skills/_shared/` for version check, cycle detection, change resolution, spec format, delta format, and proposal template
 
 ### Changed
-- Planning phase (`/ds-plan`) no longer blocks on unsatisfied dependencies - warnings only
-- Skill naming from `/ds:*` to `/ds-*` format to avoid built-in command conflicts
-- Skill descriptions made more concise and action-oriented
+- Planning phase (`/ds:plan`) no longer blocks on unsatisfied dependencies - warnings only
+- Skill descriptions made more concise and action-oriented with trigger phrases
 - `specs/commands.md` renamed to `specs/skills.md` to reflect current terminology
+- Extracted consolidation algorithm and examples from batch skill to `references/` and `examples/`
 
 ### Fixed
 - Cross-reference validation prevents archiving deltas with invalid requirement references

@@ -17,44 +17,24 @@ See [version-check.md](../_shared/version-check.md) for the standard version com
 
 Create `specs/.delta/<name>/` directory.
 
+Names should be kebab-case (e.g., `add-user-auth`, `fix-login-bug`). If the user provides a name with spaces or other formatting, convert to kebab-case and confirm.
+
 ## Step 2: Create proposal from template
 
-Create `proposal.md` from the template below.
-
-## Proposal Template
-
-```markdown
-# Proposal: <name>
-
-## Problem
-[What problem are we solving? Why does this matter?]
-
-## Dependencies
-[Other changes that must be completed first, or "None"]
-- `<change-name>` - [why this is needed first]
-
-## Changes
-- [Specific change 1]
-- [Specific change 2]
-
-## Capabilities
-
-### New
-- [New capability → becomes new spec or requirements]
-
-### Modified
-- [Existing spec that needs changes]
-
-## Out of Scope
-- [What we're explicitly NOT doing]
-
-## Success Criteria
-- [How do we know this is complete?]
-```
+Create `proposal.md` using the standard template. See [proposal-template.md](../_shared/proposal-template.md).
 
 ## Step 3: Work with user on proposal
 
-Work with the user to flesh out the proposal interactively.
+Work with the user to flesh out the proposal interactively:
+
+1. **Problem** — Ask what problem this solves and why it matters. This grounds the entire change.
+2. **Changes** — Ask what specific changes are needed. Probe for concrete details.
+3. **Success Criteria** — Ask how they'll know it's complete. This defines "done."
+4. **Dependencies** — Ask if this depends on other changes being completed first.
+5. **Out of Scope** — Suggest reasonable boundaries based on the discussion.
+6. **Capabilities** — Infer new/modified capabilities from the changes discussed.
+
+The proposal is complete when Problem, Changes, and Success Criteria have substantive content. Other sections can use reasonable defaults.
 
 ## Step 4: Check for cycles
 

@@ -1,5 +1,5 @@
 ---
-description: Abandon a change and clean up its directory and dependency references.
+description: Abandon a change and clean up its directory and dependency references. Use when canceling a change, discarding a proposal, or removing planned work.
 argument-hint: "[name]"
 disable-model-invocation: true
 ---
@@ -47,7 +47,7 @@ Contents:
   - specs/*.md (if any)
 ```
 
-Ask for confirmation unless `--force` flag or user already confirmed in Step 2.
+Ask for confirmation unless the user already confirmed in Step 2.
 
 ## Step 4: Clean up references
 

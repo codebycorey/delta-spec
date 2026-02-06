@@ -29,34 +29,7 @@ See [version-check.md](../_shared/version-check.md) for the standard version com
 
 ## Step 3: Create proposal
 
-Create `specs/.delta/<name>/proposal.md` using the standard template:
-
-```markdown
-# Proposal: <name>
-
-## Problem
-[Generated from description/context]
-
-## Dependencies
-None
-
-## Changes
-- [Inferred from description/context]
-
-## Capabilities
-
-### New
-- [Inferred capabilities]
-
-### Modified
-- [If applicable]
-
-## Out of Scope
-- [Reasonable boundaries based on description]
-
-## Success Criteria
-- [Derived from problem/changes]
-```
+Create `specs/.delta/<name>/proposal.md` using the standard template. See [proposal-template.md](../_shared/proposal-template.md).
 
 Fill in sections based on the provided description and conversation context. Keep it concise but complete.
 

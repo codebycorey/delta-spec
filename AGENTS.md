@@ -43,6 +43,7 @@ When the conversation shifts from discussion to implementation—phrases like:
 | `/ds:status` | See active changes |
 | `/ds:quick [name]` | Quick start: proposal → plan → tasks with one confirmation |
 | `/ds:batch` | Create multiple proposals from free-form feature descriptions |
+| `/ds:adopt [name]` | Adopt an existing plan from conversation into delta-spec |
 
 ## Codebase Map
 
@@ -51,7 +52,7 @@ Use this to orient before exploring. Reduces redundant file discovery.
 ```
 delta-spec/
 ├── .claude-plugin/
-│   ├── plugin.json            # Plugin name, version (0.1.0)
+│   ├── plugin.json            # Plugin name, version (0.2.0)
 │   └── marketplace.json       # Marketplace listing config
 ├── skills/
 │   ├── _shared/
@@ -70,6 +71,7 @@ delta-spec/
 │   ├── spec/SKILL.md           # /ds:spec [domain|search]
 │   ├── status/SKILL.md         # /ds:status
 │   ├── quick/SKILL.md          # /ds:quick [name]
+│   ├── adopt/SKILL.md          # /ds:adopt [name]
 │   └── batch/
 │       ├── SKILL.md            # /ds:batch
 │       ├── references/

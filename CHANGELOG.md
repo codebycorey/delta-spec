@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-02-08
+
+### Added
+- `/ds:adopt` skill for importing existing plans from conversation context into delta-spec format, skipping redundant codebase exploration
+
 ## [0.1.0] - 2026-02-06
 
 ### Added

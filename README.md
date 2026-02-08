@@ -75,6 +75,7 @@ This assertive pattern ensures Claude pauses and uses the spec-driven workflow i
 | `/ds:new <name>` | Start a new change with a proposal |
 | `/ds:quick [name] ["description"]` | Quick start: proposal, plan, and tasks with one confirmation |
 | `/ds:batch` | Create multiple proposals from free-form feature descriptions |
+| `/ds:adopt [name]` | Adopt an existing plan into delta-spec (skips codebase exploration) |
 | `/ds:plan [name]` | Create design and delta specs |
 | `/ds:tasks [name]` | Generate `tasks.md` file for one or all planned changes |
 | `/ds:archive [name]` | Safely merge delta specs and archive change |
@@ -92,6 +93,12 @@ This assertive pattern ensures Claude pauses and uses the spec-driven workflow i
 [implement]
 /ds:archive            → Merge deltas into specs, archive change
 /ds:drop               → Abandon change (if no longer needed)
+
+Alternative: Already planned in conversation?
+/ds:adopt              → Import plan as proposals + designs + delta specs
+/ds:tasks              → Create implementation tasks
+[implement]
+/ds:archive            → Merge deltas into specs, archive change
 ```
 
 ## Project Structure

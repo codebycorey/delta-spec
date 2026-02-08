@@ -1,7 +1,7 @@
 {
   "name": "ds",
   "description": "Spec-driven development with delta-based specifications",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "author": {
     "name": "codebycorey"
   },

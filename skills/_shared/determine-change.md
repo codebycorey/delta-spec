@@ -12,4 +12,5 @@ Determine which change to operate on:
 - **archive**: If none → "nothing to archive". No confirmation for single change.
 - **drop**: If none → "nothing to drop". Confirm even with single change (destructive operation).
 - **tasks**: Uses multi-change mode — if no name and multiple planned changes, process all in dependency order. Prerequisite = suggest `/ds:plan`.
+- **adopt**: Creates new changes from conversation context; does not use this resolution procedure.
 - **quick**: Creates new changes; does not use this resolution procedure.

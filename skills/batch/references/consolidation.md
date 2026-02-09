@@ -107,13 +107,13 @@ When features are merged, combine them as follows:
   - Preserve unique details from both features
   - Example: "User authentication with JWT" + "JWT login system" → "User authentication with JWT login system"
 - **Dependencies**: Preserve all unique dependencies from both features
-- **Result**: Single consolidated feature that proceeds to Step 3
+- **Result**: Single consolidated feature that proceeds to Step 4
 
 ### Edge Cases
 
 1. **No overlaps detected**:
-   - Step 2.5 is skipped entirely
-   - Workflow proceeds directly from Step 2 to Step 3
+   - Step 3 is skipped entirely
+   - Workflow proceeds directly from Step 2 to Step 4
    - No user prompt shown
 
 2. **All features overlap into one group**:
@@ -122,8 +122,8 @@ When features are merged, combine them as follows:
 
 3. **Only single-item groups**:
    - If all groups contain only 1 feature after filtering, treat as "no overlaps"
-   - Skip Step 2.5
+   - Skip Step 3
 
 4. **User rejects all consolidations**:
-   - Proceed to Step 3 with original parsed list
+   - Proceed to Step 4 with original parsed list
    - No error, workflow continues normally

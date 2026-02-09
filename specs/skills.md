@@ -31,11 +31,10 @@ The system SHALL provide a `/ds:init` skill that creates the specs directory str
 - WHEN the skill SKILL.md is defined
 - THEN the frontmatter includes `disable-model-invocation: true`
 
-#### Scenario: Non-duplicate opening line in init
-- GIVEN the init skill opening line duplicates the description verbatim
+#### Scenario: Non-redundant opening line in init
+- GIVEN the init skill opening line contains "codebase code"
 - WHEN the skill SKILL.md is defined
-- THEN the opening line adds value beyond the description
-- AND does not repeat the description text
+- THEN the opening line uses "existing codebase" without redundancy
 
 #### Scenario: Skill content describes intent not tools
 - GIVEN the init skill asks the user a question
@@ -266,8 +265,14 @@ The system SHALL provide a `/ds:tasks [name]` skill that creates a `tasks.md` fi
 - THEN the description includes what the skill does and trigger context
 - AND mentions triggers like "create tasks", "generate implementation steps", "what needs to be done"
 
+#### Scenario: Sequential step numbering in tasks
+- GIVEN the tasks skill uses "Step 2b" for dependency checking
+- WHEN the skill SKILL.md is defined
+- THEN all steps use sequential integer numbering (0, 1, 2, 3, 4, 5)
+- AND no sub-step numbering like 2b is used at the top level
+
 ### Requirement: Archive Change
-The system SHALL provide a `/ds:archive [name]` skill that safely merges delta specs and archives the change, with cycle detection, with protection against auto-invocation, argument hints, and placeholder usage.
+The system SHALL provide a `/ds:archive [name]` skill that safely merges delta specs and archives the change, with cycle detection, with task-completion verification, argument hints, and placeholder usage.
 
 #### Scenario: Merge and archive
 - GIVEN a change with delta specs
@@ -325,10 +330,18 @@ The system SHALL provide a `/ds:archive [name]` skill that safely merges delta s
 - WHEN showing the confirmation prompt
 - THEN the system lists all files that will be changed
 
-#### Scenario: Destructive operation protection
-- GIVEN ds-archive permanently merges specs
-- WHEN the skill SKILL.md is defined
-- THEN the frontmatter includes `disable-model-invocation: true`
+#### Scenario: Task completion verification
+- GIVEN a change has tasks.md with tasks not all marked done
+- WHEN `/ds:archive` is invoked
+- THEN the system checks all task statuses
+- AND stops with an error listing incomplete tasks
+- AND no files are modified
+
+#### Scenario: Missing tasks file
+- GIVEN a change does not have tasks.md
+- WHEN `/ds:archive` is invoked
+- THEN the system shows a warning
+- AND proceeds with archive (tasks are optional)
 
 #### Scenario: Argument hint for optional name parameter
 - GIVEN ds-archive accepts an optional name argument
@@ -348,7 +361,7 @@ The system SHALL provide a `/ds:archive [name]` skill that safely merges delta s
 #### Scenario: Sequential step numbering in archive
 - GIVEN the archive skill uses non-sequential step numbers (2.1, 2.5, 2.6)
 - WHEN the skill SKILL.md is defined
-- THEN all steps are numbered sequentially (1, 2, 3, 4, 5, 6, 7)
+- THEN all steps are numbered sequentially (1, 2, 3, 4, 5, 6, 7, 8)
 - AND no sub-step numbering like 2.1 or 2.5 is used at the top level
 
 #### Scenario: No redundant merge documentation
@@ -358,7 +371,7 @@ The system SHALL provide a `/ds:archive [name]` skill that safely merges delta s
 - AND there is no separate "Delta Rules" section duplicating the merge algorithm
 
 #### Scenario: Description with trigger phrases
-- GIVEN ds-archive has disable-model-invocation but descriptions serve human readers
+- GIVEN ds-archive descriptions serve human readers
 - WHEN the skill SKILL.md is defined
 - THEN the description includes what the skill does and trigger context
 - AND mentions triggers like "done implementing", "finalize change", "merge specs"
@@ -410,6 +423,12 @@ The system SHALL provide a `/ds:drop [name]` skill that abandons a change with p
 - WHEN the skill SKILL.md is defined
 - THEN no undocumented or unsupported flags are referenced
 - AND confirmation is always required for destructive operations
+
+#### Scenario: Direct phrasing for preservation note
+- GIVEN the drop skill notes that work can be preserved
+- WHEN the skill SKILL.md is defined
+- THEN the note uses direct phrasing ("To preserve work, use `/ds:archive` instead")
+- AND does not use conditional phrasing ("If work should be preserved")
 
 ### Requirement: Show Status
 The system SHALL provide a `/ds:status` skill that shows all active changes with conflicts, progress from task files, dependency visualization, and cycle warnings, with tool restrictions for read-only access.
@@ -595,10 +614,11 @@ The system SHALL provide a `/ds:quick [name] ["description"]` skill that creates
 - THEN the system warns about the existing change
 - AND asks whether to continue with that change or pick a different name
 
-#### Scenario: Argument hint for optional parameters
+#### Scenario: Simplified argument hint for quick
 - GIVEN ds-quick accepts optional name and description arguments
 - WHEN the skill SKILL.md is defined
-- THEN the frontmatter includes `argument-hint: "[name] [\"description\"]"`
+- THEN the frontmatter includes `argument-hint: "<name> [description]"`
+- AND uses angle brackets for the primary argument and square brackets for optional
 
 #### Scenario: Arguments placeholder documented
 - GIVEN ds-quick accepts name and description arguments
@@ -633,12 +653,12 @@ The system SHALL provide a `/ds:batch` skill that creates multiple proposals fro
   1. Step 0: Version check
   2. Step 1: Prompt for features
   3. Step 2: Parse and extract features
-  4. Step 2.5: Consolidate overlapping features (if overlaps found)
-  5. Step 3: Infer dependencies
-  6. Step 3.5: Detect and resolve cycles (if cycles found)
-  7. Step 4: Display dependency graph
-  8. Step 5: Confirm and create proposals
-  9. Step 6: Offer batch planning
+  4. Step 3: Consolidate overlapping features (if overlaps found)
+  5. Step 4: Infer dependencies
+  6. Step 5: Detect and resolve cycles (if cycles found)
+  7. Step 6: Display dependency graph
+  8. Step 7: Confirm and create proposals
+  9. Step 8: Offer batch planning
 
 #### Scenario: Prompt for features
 - GIVEN an initialized repository
@@ -782,9 +802,15 @@ The system SHALL provide a `/ds:batch` skill that creates multiple proposals fro
 - AND mentions triggers like "plan multiple features", "batch create proposals", "several features to plan"
 
 #### Scenario: Edge case cross-references steps
-- GIVEN the Circular Dependencies edge case describes behavior handled by Step 3.5
+- GIVEN the Circular Dependencies edge case describes behavior handled by Step 5
 - WHEN the skill SKILL.md is defined
-- THEN the edge case uses a cross-reference to Step 3.5 rather than re-summarizing the behavior
+- THEN the edge case uses a cross-reference to Step 5 rather than re-summarizing the behavior
+
+#### Scenario: Sequential step numbering in batch
+- GIVEN the batch skill uses fractional step numbers (2.5, 3.5)
+- WHEN the skill SKILL.md is defined
+- THEN all steps use sequential integer numbering (0, 1, 2, 3, 4, 5, 6, 7, 8)
+- AND no fractional numbering like 2.5 or 3.5 is used
 
 ### Requirement: Consolidate overlapping features in batch
 The system SHALL detect and suggest consolidation of overlapping features during `/ds:batch` before dependency inference.
@@ -792,7 +818,7 @@ The system SHALL detect and suggest consolidation of overlapping features during
 #### Scenario: Progressive disclosure for consolidation
 - GIVEN the consolidation algorithm is detailed (~130 lines)
 - WHEN the batch skill SKILL.md is defined
-- THEN the main SKILL.md contains a brief summary of Step 2.5 (3-4 lines)
+- THEN the main SKILL.md contains a brief summary of Step 3 (3-4 lines)
 - AND references `references/consolidation.md` for the full algorithm
 - AND the reference file contains the complete overlap detection, grouping, prompting, merging, and edge case logic
 
@@ -871,20 +897,20 @@ The system SHALL detect and suggest consolidation of overlapping features during
 #### Scenario: No overlaps detected
 - GIVEN parsed features have no overlap signals
 - WHEN checking for consolidation
-- THEN the system skips Step 2.5 entirely
-- AND proceeds directly from Step 2 (parsing) to Step 3 (dependency inference)
+- THEN the system skips Step 3 entirely
+- AND proceeds directly from Step 2 (parsing) to Step 4 (dependency inference)
 
 #### Scenario: Consolidation before dependency inference
 - GIVEN consolidation suggestions are confirmed
 - WHEN the workflow continues
-- THEN dependency inference (Step 3) works on the consolidated feature list
+- THEN dependency inference (Step 4) works on the consolidated feature list
 - AND dependency keywords reference the merged feature names
 
 #### Scenario: Consolidation may eliminate cycles
 - GIVEN features A and B depend on each other
 - WHEN consolidation merges A and B into a single feature
 - THEN the cycle is eliminated
-- AND cycle detection (Step 3.5) operates on the consolidated graph
+- AND cycle detection (Step 5) operates on the consolidated graph
 
 #### Scenario: Display signals in suggestions
 - GIVEN a consolidation suggestion is shown
@@ -905,31 +931,30 @@ The system SHALL detect and suggest consolidation of overlapping features during
 - AND focuses on domain-specific terms (nouns, technical terms)
 
 #### Scenario: Consolidation step numbering
-- GIVEN Step 2.5 is added to the workflow
+- GIVEN consolidation is part of the batch workflow
 - WHEN documenting the skill
-- THEN existing steps remain numbered: 0, 1, 2, 3, 3.5, 4, 5, 6
-- AND the new step is inserted as Step 2.5 (between 2 and 3)
-- AND all references to subsequent steps remain unchanged
+- THEN all steps use sequential integer numbering: 0, 1, 2, 3, 4, 5, 6, 7, 8
+- AND consolidation is Step 3 (between parsing and dependency inference)
 
 ### Requirement: Adopt Existing Plan
-The system SHALL provide a `/ds:adopt` skill that imports an existing plan from conversation context into delta-spec's format, skipping codebase exploration, with argument hints and placeholder usage.
+The system SHALL provide a `/ds:adopt` skill that imports an existing plan from conversation context into delta-spec's format, including task generation, skipping codebase exploration, with argument hints and placeholder usage.
 
 #### Scenario: Extract changes from conversation context
 - GIVEN an initialized repository and prior planning in conversation (plan mode or discussion)
 - WHEN the user runs `/ds:adopt`
 - THEN the system reads the conversation context to identify planned changes
-- AND extracts structured proposals, designs, and delta specs from the context
+- AND extracts structured proposals, designs, delta specs, and tasks from the context
 - AND does not re-explore the codebase
 
 #### Scenario: Single change extraction
 - GIVEN the conversation context describes one change
 - WHEN extracting changes
-- THEN the system creates one proposal, one design, and delta specs for that change
+- THEN the system creates one proposal, one design, delta specs, and tasks for that change
 
 #### Scenario: Multi-change extraction
 - GIVEN the conversation context describes multiple changes
 - WHEN extracting changes
-- THEN the system creates proposals, designs, and delta specs for each change
+- THEN the system creates proposals, designs, delta specs, and tasks for each change
 - AND infers dependencies between changes from the context
 
 #### Scenario: Confirmation before writing
@@ -943,7 +968,7 @@ The system SHALL provide a `/ds:adopt` skill that imports an existing plan from 
 - GIVEN the user confirms with "y"
 - WHEN creating artifacts
 - THEN the system creates `specs/.delta/<name>/` for each change
-- AND writes `proposal.md`, `design.md`, and `specs/*.md` for each
+- AND writes `proposal.md`, `design.md`, `specs/*.md`, and `tasks.md` for each
 - AND creates in dependency order (dependencies first)
 
 #### Scenario: Confirmation rejected
@@ -964,11 +989,23 @@ The system SHALL provide a `/ds:adopt` skill that imports an existing plan from 
 - THEN the system detects the cycle using the shared cycle detection procedure
 - AND follows the full resolution flow from `_shared/cycle-detection.md`
 
-#### Scenario: Output summary and next step
+#### Scenario: Task generation from context
+- GIVEN a plan contains implementation steps, file paths, or ordered work items
+- WHEN creating tasks
+- THEN the system extracts tasks from the plan context without re-exploring the codebase
+- AND uses the standard task format (## Task N: with Status, Owner, Files, Refs fields)
+- AND orders tasks by dependency
+
+#### Scenario: Thin context for tasks
+- GIVEN a plan lacks detailed implementation steps
+- WHEN creating tasks
+- THEN the system creates tasks from available information
+- AND marks sparse tasks with [TODO: needs detail]
+
+#### Scenario: Output summary
 - GIVEN all artifacts have been created
 - WHEN the adoption is complete
-- THEN the system shows a summary of created artifacts
-- AND suggests running `/ds:tasks` as the next step
+- THEN the system shows a summary of created artifacts including tasks.md with task count
 
 #### Scenario: Existing change conflict
 - GIVEN an extracted change name matches an existing change in `specs/.delta/`
@@ -1048,6 +1085,12 @@ The system SHALL use `/ds:*` (colon notation) as the canonical skill invocation 
 - WHEN naming requirements about specific skills
 - THEN use the colon format in the title (e.g., "Initialize Repository" for `/ds:init`)
 - AND reference the skill with colon notation in the requirement text
+
+#### Scenario: README proposal example matches template
+- GIVEN the README.md "How It Works" section includes a proposal example
+- WHEN the example is written
+- THEN the proposal section headers match `_shared/proposal-template.md`
+- AND `## Changes` is used instead of `## Solution`
 
 ### Requirement: Skill Frontmatter Metadata
 The system SHALL include appropriate frontmatter fields in SKILL.md files to control skill behavior and improve UX.
@@ -1272,3 +1315,76 @@ The system SHALL extract the proposal template to a shared file to eliminate dup
 - GIVEN the adopt skill creates proposals
 - WHEN the skill SKILL.md is defined
 - THEN the skill references `_shared/proposal-template.md` instead of inlining the template
+
+### Requirement: Shared Design Template
+The system SHALL extract the design document template to a shared file to eliminate duplication across skills.
+
+#### Scenario: Create shared design template file
+- GIVEN the design template is duplicated across plan, adopt, and quick skills
+- WHEN organizing skill structure
+- THEN a `skills/_shared/design-template.md` file contains the canonical design template
+- AND includes Context, Approach, Decisions, Files Affected, and Risks sections
+
+#### Scenario: Include design template in plan
+- GIVEN the plan skill creates design documents
+- WHEN the skill SKILL.md is defined
+- THEN the skill references `_shared/design-template.md` instead of inlining the template
+
+#### Scenario: Include design template in adopt
+- GIVEN the adopt skill creates design documents from conversation context
+- WHEN the skill SKILL.md is defined
+- THEN the skill references `_shared/design-template.md` instead of inlining the template
+
+#### Scenario: Include design template in quick
+- GIVEN the quick skill creates design documents
+- WHEN the skill SKILL.md is defined
+- THEN the skill references `_shared/design-template.md` for the design format
+
+### Requirement: Shared Task Format
+The system SHALL extract the task file format to a shared file to eliminate duplication across skills.
+
+#### Scenario: Create shared task format file
+- GIVEN the task format is duplicated across tasks and adopt skills
+- WHEN organizing skill structure
+- THEN a `skills/_shared/task-format.md` file contains the canonical task format
+- AND includes the file structure, task fields table, and updating instructions
+
+#### Scenario: Include task format in tasks
+- GIVEN the tasks skill creates task files
+- WHEN the skill SKILL.md is defined
+- THEN the skill references `_shared/task-format.md` instead of inlining the format
+
+#### Scenario: Include task format in adopt
+- GIVEN the adopt skill creates task files from conversation context
+- WHEN the skill SKILL.md is defined
+- THEN the skill references `_shared/task-format.md` instead of inlining the format
+
+### Requirement: Shared Dependency Signals
+The system SHALL extract dependency signal patterns to a shared file to eliminate implicit cross-skill references.
+
+#### Scenario: Create shared dependency signals file
+- GIVEN the dependency keywords table is defined in batch and referenced by name in adopt
+- WHEN organizing skill structure
+- THEN a `skills/_shared/dependency-signals.md` file contains the canonical dependency keyword patterns
+- AND includes the keywords table, matching rules, and confidence levels
+
+#### Scenario: Include dependency signals in batch
+- GIVEN the batch skill infers dependencies from descriptions
+- WHEN the skill SKILL.md is defined
+- THEN the skill references `_shared/dependency-signals.md` instead of inlining the keywords table
+
+#### Scenario: Include dependency signals in adopt
+- GIVEN the adopt skill infers dependencies from conversation context
+- WHEN the skill SKILL.md is defined
+- THEN the skill references `_shared/dependency-signals.md` instead of a cross-reference to batch
+
+### Requirement: Repository Hygiene
+The system SHALL maintain a `.gitignore` file with common development artifact patterns.
+
+#### Scenario: Standard ignore patterns
+- GIVEN the repository is used by contributors with various toolchains
+- WHEN the `.gitignore` is configured
+- THEN it includes patterns for OS artifacts (`.DS_Store`)
+- AND includes patterns for dependency directories (`node_modules/`)
+- AND includes patterns for environment files (`.env`)
+- AND includes patterns for temporary files (`*.tmp`, `*.log`)

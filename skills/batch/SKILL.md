@@ -52,67 +52,29 @@ Generate concise kebab-case names:
 - "audit logging for API calls" → `audit-logging`
 - "admin dashboard" → `admin-dashboard`
 
-## Step 2.5: Consolidate overlapping features (if detected)
+## Step 3: Consolidate overlapping features (if detected)
 
 Before inferring dependencies, analyze parsed features for potential overlaps. If multiple features appear to describe similar or related functionality, suggest consolidating them to avoid duplicate work during planning and implementation.
 
-If no overlaps are detected, skip this step entirely and proceed to Step 3.
+If no overlaps are detected, skip this step entirely and proceed to Step 4.
 
 See [references/consolidation.md](references/consolidation.md) for the full overlap detection and merging algorithm.
 
-## Step 3: Infer dependencies
+## Step 4: Infer dependencies
 
-This step receives the feature list from Step 2 (or the consolidated list from Step 2.5 if overlaps were detected and confirmed).
+This step receives the feature list from Step 2 (or the consolidated list from Step 3 if overlaps were detected and confirmed).
 
-Scan each feature description for dependency keywords:
+See [dependency-signals.md](../_shared/dependency-signals.md) for the dependency keyword patterns, matching rules, and confidence levels.
 
-### Dependency Keywords
+## Step 5: Detect and resolve cycles
 
-| Pattern | Example | Meaning |
-|---------|---------|---------|
-| `needs X` | "needs auth" | Depends on feature matching "auth" |
-| `requires X` | "requires authentication" | Depends on feature matching "authentication" |
-| `uses X` | "uses the permissions system" | Depends on feature matching "permissions" |
-| `builds on X` | "builds on auth" | Depends on feature matching "auth" |
-| `after X` | "after auth is done" | Depends on feature matching "auth" |
-| `depends on X` | "depends on user model" | Depends on feature matching "user model" |
-| `(requires X)` | "(requires auth)" | Parenthetical dependency hint |
-
-### Matching Feature Names
-
-When a dependency keyword is found:
-1. Extract the referenced term (e.g., "auth" from "needs auth")
-2. Fuzzy match against other feature names in the batch
-3. Match if the term appears in the feature name or description
-
-### Confidence Levels
-
-**High confidence** (proceed automatically):
-- Exact name match: "needs user-auth" matches feature named `user-auth`
-- Clear substring: "needs auth" matches `user-auth`
-- Single possible match in the batch
-
-**Low confidence** (ask for clarification):
-- Multiple possible matches: "needs users" could match `user-auth` or `user-profile`
-- No matches found but dependency keyword present
-- Ambiguous reference
-
-If uncertain, ask:
-
-> Feature "admin-dashboard" mentions "needs permissions". Did you mean:
-> 1. `role-permissions` - Role-based permissions system
-> 2. Something not in this batch (will be added to Dependencies as external)
-> 3. No dependency intended
-
-## Step 3.5: Detect and resolve cycles
-
-Note: Consolidation (Step 2.5) happens before this step. Merging overlapping features may eliminate some cycles (e.g., if A and B depend on each other but are actually the same feature).
+Note: Consolidation (Step 3) happens before this step. Merging overlapping features may eliminate some cycles (e.g., if A and B depend on each other but are actually the same feature).
 
 See [cycle-detection.md](../_shared/cycle-detection.md) for the cycle detection algorithm. Follow the **Full resolution** flow.
 
-After resolution, continue to Step 4 with the resolved graph.
+After resolution, continue to Step 6 with the resolved graph.
 
-## Step 4: Display dependency graph
+## Step 6: Display dependency graph
 
 Show the parsed features and their dependencies:
 
@@ -151,7 +113,7 @@ Features:
 
 This shows: feature-c depends on both a and b, feature-e depends on c, feature-d is independent.
 
-## Step 5: Confirm and create proposals
+## Step 7: Confirm and create proposals
 
 After showing the graph, ask for confirmation:
 
@@ -166,7 +128,7 @@ On "y":
 On "n" or empty input:
 - Stop and tell user they can refine their description and try again
 
-## Step 6: Offer batch planning
+## Step 8: Offer batch planning
 
 After all proposals are created, ask:
 
@@ -205,11 +167,11 @@ If a generated name matches an existing change in `specs/.delta/`:
 
 ### No Overlaps Detected
 
-If Step 2 parsing completes and no overlap signals are detected between features, Step 2.5 is skipped entirely. The workflow proceeds directly from Step 2 to Step 3 with the original parsed feature list.
+If Step 2 parsing completes and no overlap signals are detected between features, Step 3 is skipped entirely. The workflow proceeds directly from Step 2 to Step 4 with the original parsed feature list.
 
 ### Circular Dependencies
 
-Handled in Step 3.5. See [cycle-detection.md](../_shared/cycle-detection.md).
+Handled in Step 5. See [cycle-detection.md](../_shared/cycle-detection.md).
 
 ## Examples
 

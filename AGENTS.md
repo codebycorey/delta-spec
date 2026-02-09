@@ -61,7 +61,10 @@ delta-spec/
 │   │   ├── spec-format.md      # Shared base spec format + guidelines
 │   │   ├── delta-format.md     # Shared delta spec format
 │   │   ├── determine-change.md # Shared change resolution procedure
-│   │   └── proposal-template.md # Shared proposal template
+│   │   ├── proposal-template.md # Shared proposal template
+│   │   ├── design-template.md  # Shared design document template
+│   │   ├── task-format.md      # Shared task file format
+│   │   └── dependency-signals.md # Shared dependency keyword patterns
 │   ├── init/SKILL.md           # /ds:init
 │   ├── new/SKILL.md            # /ds:new <name>
 │   ├── plan/SKILL.md           # /ds:plan [name]

@@ -123,8 +123,8 @@ specs/                        # Source of truth (visible)
 ## Problem
 Users can't log in to the application.
 
-## Solution
-Implement JWT-based authentication with login/logout endpoints.
+## Changes
+- Implement JWT-based authentication with login/logout endpoints
 ```
 
 ### 2. Write Delta Specs

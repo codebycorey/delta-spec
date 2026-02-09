@@ -53,19 +53,19 @@ Tasks are numbered sequentially across all changes.
 - Read proposal, design, and delta specs
 - Understand the full scope and approach
 
-## Step 2b: Check dependencies
+## Step 3: Check dependencies
 
 - Parse Dependencies from proposal
 - If unsatisfied dependencies exist, warn user and ask to proceed or defer
 
-## Step 3: Explore the codebase
+## Step 4: Explore the codebase
 
 - Identify exact files and functions to modify
 - Find where new code should be added
 - Understand dependencies and integration points
 - Check for test infrastructure (test directories, test configs, existing test patterns)
 
-## Step 4: Create tasks.md file
+## Step 5: Create tasks.md file
 
 Create `specs/.delta/<name>/tasks.md` with specific, actionable tasks:
 
@@ -79,46 +79,7 @@ Use the Write tool to create the task file.
 
 ## Task File Format
 
-```markdown
-# Tasks: <change-name>
-
-Generated: YYYY-MM-DD
-
----
-
-## Task 1: <title>
-- **Status:** pending
-- **Owner:** (unassigned)
-- **Files:** path/to/file.ts
-- **Refs:** [Requirement Name]
-
-<description of what to do>
-
-## Task 2: <title>
-- **Status:** pending
-- **Owner:** (unassigned)
-- **Files:** path/to/other.ts
-- **Refs:** [Another Requirement]
-
-<description>
-```
-
-### Task Fields
-
-| Field | Required | Values |
-|-------|----------|--------|
-| Status | Yes | `pending`, `in_progress`, `done` |
-| Owner | Yes | Agent identifier or `(unassigned)` |
-| Files | No | Primary file(s) affected |
-| Refs | No | Links to requirements |
-
-### Updating Tasks
-
-Agents update tasks by editing the file directly:
-
-1. **Claim task:** Set `Status: in_progress` and `Owner: <agent-id>`
-2. **Complete task:** Set `Status: done` (keep owner for attribution)
-3. **Unclaim task:** Set `Status: pending` and `Owner: (unassigned)`
+See [task-format.md](../_shared/task-format.md) for the task file format, fields, and update instructions.
 
 ### Multi-Change Mode
 

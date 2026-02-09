@@ -27,7 +27,7 @@ Read the prior conversation to identify planned changes. For each change, extrac
 3. **Approach** — technical decisions, architecture, and implementation strategy from the plan
 4. **Files affected** — specific files mentioned in the planning
 5. **Delta specs** — new or modified requirements identified in the plan
-6. **Dependencies** — relationships between changes, using the same signal patterns as `/ds:batch`
+6. **Dependencies** — relationships between changes. See [dependency-signals.md](../_shared/dependency-signals.md) for keyword patterns
 
 ### What to look for in context
 
@@ -103,32 +103,26 @@ Use the standard template from [proposal-template.md](../_shared/proposal-templa
 
 ### 6c: Create design.md
 
-Write the design document directly from the conversation context:
-
-```markdown
-# Design: <name>
-
-## Context
-[What the plan identified about the current state — existing code, patterns, constraints]
-
-## Approach
-[Technical approach from the plan — architecture, implementation strategy]
-
-## Decisions
-[Key decisions made during planning, with Choice/Why/Trade-offs]
-
-## Files Affected
-[Specific files from the plan]
-
-## Risks
-[Risks or concerns identified during planning]
-```
+Write the design document directly from the conversation context. See [design-template.md](../_shared/design-template.md) for the format. Fill in each section from what the plan already describes.
 
 ### 6d: Create delta specs
 
 Create `specs/.delta/<name>/specs/<domain>.md` files using the delta format. See [delta-format.md](../_shared/delta-format.md).
 
 Determine affected spec domains from the plan context and create one delta file per domain with ADDED, MODIFIED, or REMOVED requirements as appropriate.
+
+### 6e: Create tasks.md
+
+Create `specs/.delta/<name>/tasks.md` using the standard task format. See [task-format.md](../_shared/task-format.md) for the format.
+
+Extract tasks from the plan context:
+
+1. Identify implementation steps, file changes, and ordered work items from the plan
+2. Create one task per logical unit of work
+3. Order tasks by dependency (what needs to happen first)
+4. Do NOT re-explore the codebase — extract from what the plan already describes
+
+If the plan lacks implementation detail, create tasks from available information and mark sparse tasks with `[TODO: needs detail]`.
 
 ## Step 7: Output summary
 
@@ -141,13 +135,15 @@ Show what was created:
     ✓ proposal.md
     ✓ design.md
     ✓ specs/domain.md
+    ✓ tasks.md (N tasks)
 
   another-change/
     ✓ proposal.md
     ✓ design.md
     ✓ specs/domain.md
+    ✓ tasks.md (N tasks)
 
-Next step: Run /ds:tasks to generate implementation tasks.
+Ready to implement. Run /ds:archive when complete.
 ```
 
 ## Edge Cases

@@ -1,7 +1,6 @@
 ---
 description: Complete a change by merging delta specs into main specs and archiving. Use when implementation is done, all tasks are complete, or ready to finalize a change.
 argument-hint: "[name]"
-disable-model-invocation: true
 ---
 
 # /ds:archive [name] - Complete and archive a change
@@ -10,7 +9,7 @@ Merge delta specs into main specs and archive the change.
 
 **Arguments:** If `$ARGUMENTS` is provided, use it as the `name` parameter. Otherwise, follow the determination logic below.
 
-**Note:** This skill performs permanent operations (merging specs) and requires explicit user invocation.
+**Note:** This skill performs permanent operations (merging specs). When tasks exist, all must be marked done before archiving proceeds.
 
 ## Step 0: Version Check
 
@@ -20,7 +19,22 @@ See [version-check.md](../_shared/version-check.md) for the standard version com
 
 See [determine-change.md](../_shared/determine-change.md) for the standard change resolution procedure. If none → nothing to archive.
 
-## Step 2: Check dependencies
+## Step 2: Check task completion
+
+If `specs/.delta/<name>/tasks.md` exists:
+1. Parse all `## Task N:` sections
+2. Extract `- **Status:** <value>` for each task
+3. If any task is not `done`:
+   - Error: "Cannot archive: N task(s) incomplete (X pending, Y in_progress)"
+   - List incomplete tasks by title and status
+   - "Mark tasks as done or remove them from tasks.md, then retry."
+   - **Stop** — do not proceed
+
+If `specs/.delta/<name>/tasks.md` does not exist:
+- Warn: "No tasks.md found. Ensure implementation is complete before archiving."
+- Proceed (informational only)
+
+## Step 3: Check dependencies
 
 - Parse Dependencies from proposal
 - If unsatisfied dependencies exist:
@@ -28,13 +42,13 @@ See [determine-change.md](../_shared/determine-change.md) for the standard chang
   - Ask to proceed anyway or archive dependency first
 - Archiving out of order may result in specs that reference requirements that don't exist yet
 
-## Step 3: Check for cycles
+## Step 4: Check for cycles
 
 Check if this change is part of a circular dependency.
 
 See [cycle-detection.md](../_shared/cycle-detection.md) for the cycle detection algorithm. Follow the **Warn with override** flow (archiving may break the cycle).
 
-## Step 4: Pre-validate references
+## Step 5: Pre-validate references
 
 Before showing any diffs, validate all delta operations:
 
@@ -47,7 +61,7 @@ Before showing any diffs, validate all delta operations:
    - If found, error: "Cannot add 'X': requirement already exists in specs/Y.md"
 4. If any validation fails, stop immediately - **no files are modified**
 
-## Step 5: Check for conflicts
+## Step 6: Check for conflicts
 
 Before proceeding with merge:
 
@@ -58,7 +72,7 @@ Before proceeding with merge:
    - Ask: "Proceed anyway or resolve conflict first?"
 4. Uses same conflict detection logic as `/ds:status`
 
-## Step 6: Merge delta specs with confirmation
+## Step 7: Merge delta specs with confirmation
 
 For each delta spec in `specs/.delta/<name>/specs/`:
 - Read the corresponding main spec in `specs/` (or create if new)
@@ -71,7 +85,7 @@ After showing all diffs, require explicit confirmation:
 3. **Default to No** - empty input or "n" cancels
 4. Only proceed on explicit "y" or "yes"
 
-## Step 7: Archive
+## Step 8: Archive
 
 - Move entire folder to `specs/.delta/archive/YYYY-MM-DD-<name>/`
 - Summarize what was merged

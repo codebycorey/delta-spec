@@ -7,6 +7,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.1] - 2026-02-08
+
+### Added
+- Shared reference files in `skills/_shared/`:
+  - `design-template.md` - canonical design document template
+  - `task-format.md` - canonical task file format and field reference
+  - `dependency-signals.md` - dependency keyword patterns for inference
+
+### Changed
+- Extracted design template from plan, adopt, and quick skills to shared file
+- Extracted task format from tasks and adopt skills to shared file
+- Extracted dependency signal patterns from batch and adopt skills to shared file
+- `/ds:tasks` steps renumbered to sequential integers (removed Step 2b)
+- `/ds:batch` steps renumbered to sequential integers (removed Step 2.5, 3.5)
+- Simplified `/ds:quick` argument-hint from `'[name] ["description"]'` to `'<name> [description]'`
+
+### Fixed
+- README proposal example uses `## Changes` matching actual template (was `## Solution`)
+- Redundant "codebase code" wording in `/ds:init` opening line
+- Indirect phrasing in `/ds:drop` preservation note
+- Expanded `.gitignore` with `node_modules/`, `.env`, `*.tmp`
+
 ## [0.2.0] - 2026-02-08
 
 ### Added

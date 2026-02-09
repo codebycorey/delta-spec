@@ -1,9 +1,9 @@
 ---
 description: Quick start a change with minimal interaction. Use when fast-tracking a straightforward change that needs proposal, design, and tasks in one step.
-argument-hint: '[name] ["description"]'
+argument-hint: '<name> [description]'
 ---
 
-# /ds:quick [name] ["description"] - Quick start a change
+# /ds:quick <name> [description] - Quick start a change
 
 Create a complete change setup (proposal, design, tasks) with a single confirmation point.
 
@@ -50,7 +50,7 @@ Display the generated proposal to the user, then ask:
 Execute the planning phase without interaction:
 
 1. **Explore the codebase** - Find relevant code, patterns, architecture
-2. **Create design.md** - Document context, approach, decisions, files affected
+2. **Create design.md** - See [design-template.md](../_shared/design-template.md) for the format
 3. **Create delta specs** - Generate `specs/.delta/<name>/specs/<domain>.md` files
 
 ## Step 6: Run task generation

@@ -5,7 +5,7 @@ disable-model-invocation: true
 
 # /ds:init - Initialize delta-spec
 
-Set up the specs directory structure and optionally generate initial specifications from existing codebase code.
+Set up the specs directory structure and optionally generate initial specifications from an existing codebase.
 
 **Note:** This skill performs destructive operations (creating directory structure, potentially overwriting `.delta-spec.json`) and requires explicit user invocation.
 

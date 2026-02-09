@@ -65,5 +65,5 @@ If user chose "Drop and clean references":
 ## Notes
 
 - This is permanent - the change is not archived
-- If work should be preserved, use `/ds:archive` instead
+- To preserve work, use `/ds:archive` instead
 - Dropped changes leave no trace (unlike archived changes)
